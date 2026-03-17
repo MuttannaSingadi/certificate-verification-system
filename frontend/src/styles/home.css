@@ -1,0 +1,209 @@
+/* GLOBAL */
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background:#f8fafc;
+}
+
+/* CONTAINER */
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:0 20px;
+}
+
+/* HERO SECTION */
+
+.hero{
+  background:linear-gradient(135deg,#1e3a8a,#2563eb,#3b82f6);
+  color:white;
+  text-align:center;
+  padding:120px 20px;
+}
+
+.hero h1{
+  font-size:50px;
+  font-weight:700;
+  margin-bottom:15px;
+}
+
+.hero p{
+  font-size:18px;
+  color:#e2e8f0;
+  margin-bottom:40px;
+}
+
+/* VERIFY BOX */
+
+.verify-box{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.verify-box input{
+  padding:14px 18px;
+  width:280px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  font-size:15px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.15);
+}
+
+.verify-box button{
+  padding:14px 26px;
+  border:none;
+  border-radius:8px;
+  background:#0ea5e9;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+.verify-box button:hover{
+  background:#0284c7;
+  transform:translateY(-2px);
+}
+
+/* FEATURES */
+
+.features{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  padding:80px 20px;
+  background:white;
+  flex-wrap:wrap;
+}
+
+.feature-card{
+  width:260px;
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
+  text-align:center;
+  transition:all 0.3s ease;
+}
+
+.feature-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+}
+
+.feature-card h3{
+  margin-bottom:10px;
+  color:#1e293b;
+}
+
+.feature-card p{
+  color:#64748b;
+  font-size:15px;
+}
+
+/* HOW IT WORKS */
+
+.how-it-works{
+  text-align:center;
+  padding:90px 20px;
+  background:#f1f5f9;
+}
+
+.how-it-works h2{
+  font-size:34px;
+  margin-bottom:45px;
+  color:#1e293b;
+}
+
+.steps{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+.step{
+  width:260px;
+  background:white;
+  padding:25px;
+  border-radius:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.step h3{
+  margin-bottom:10px;
+}
+
+/* ABOUT SYSTEM */
+
+.about-system{
+  background:#e2e8f0;
+  padding:90px 20px;
+  text-align:center;
+}
+
+.about-system h2{
+  font-size:34px;
+  margin-bottom:20px;
+  color:#1e293b;
+}
+
+.about-system p{
+  max-width:700px;
+  margin:auto;
+  font-size:16px;
+  color:#475569;
+  line-height:1.6;
+}
+
+/* FOOTER */
+
+.footer{
+  background:#0f172a;
+  color:white;
+  text-align:center;
+  padding:25px;
+  font-size:14px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media(max-width:768px){
+
+.hero{
+  padding:90px 20px;
+}
+
+.hero h1{
+  font-size:34px;
+}
+
+.verify-box{
+  flex-direction:column;
+}
+
+.verify-box input{
+  width:90%;
+}
+
+.verify-box button{
+  width:90%;
+}
+
+.features{
+  flex-direction:column;
+  align-items:center;
+}
+
+.steps{
+  flex-direction:column;
+  align-items:center;
+}
+
+}

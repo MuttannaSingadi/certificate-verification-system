@@ -1,0 +1,28 @@
+.dashboard{
+  padding:60px;
+  text-align:center;
+}
+
+.dashboard h1{
+  margin-bottom:40px;
+}
+
+.dashboard-cards{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+}
+
+.card{
+  width:250px;
+  padding:30px;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+}
