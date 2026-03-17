@@ -3,95 +3,92 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "../styles/login.css";
 
-export default function Login(){
+export default function Login() {
 
   const navigate = useNavigate();
 
-  const [formData,setFormData] = useState({
-    email:"",
-    password:""
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
   });
 
-  const handleChange = (e)=>{
+  const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = async (e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try{
+    try {
 
-      const res = await fetch("https://certificate-backend.onrender.com/api/auth/login", {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify(formData)
-      });
+      const res = await fetch(
+        "https://certificate-backend.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        }
+      );
 
       const data = await res.json();
 
-      if(res.ok){
-        alert("Login Successful");
+      if (res.ok) {
+        alert(data.message || "Login successful");
         navigate("/dashboard");
-      }else{
+      } else {
         alert(data.message || "Login failed");
       }
 
-    }catch(error){
-      console.log(error);
+    } catch (error) {
+      console.error(error);
       alert("Server error");
     }
   };
 
-  return(
-
+  return (
     <>
-    <Navbar/>
+      <Navbar />
 
-    <div className="login-container">
+      <div className="login-container">
+        <div className="login-card">
 
-      <div className="login-card">
+          <h2>Login</h2>
 
-        <h2>Login</h2>
+          <form onSubmit={handleSubmit}>
 
-        <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+            <button type="submit">Login</button>
 
-          <button type="submit">
-            Login
-          </button>
+          </form>
 
-        </form>
+          <p className="register-link">
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
 
-        <p className="register-link">
-          Don't have an account? <Link to="/register">Register</Link>
-        </p>
-
+        </div>
       </div>
-
-    </div>
-
     </>
-  )
+  );
 }
