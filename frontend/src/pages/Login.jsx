@@ -25,7 +25,7 @@ export default function Login() {
     try {
 
       const res = await fetch(
-        "https://certificate-backend.onrender.com/api/auth/login",
+       "https://certificate-verification-system-tpcf.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {

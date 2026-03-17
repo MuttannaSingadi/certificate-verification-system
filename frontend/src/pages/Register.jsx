@@ -30,7 +30,7 @@ export default function Register() {
     try {
 
       const res = await fetch(
-        "https://certificate-backend.onrender.com/api/auth/register",
+        "https://certificate-verification-system-tpcf.onrender.com/api/auth/register",
         {
           method: "POST",
           headers: {
