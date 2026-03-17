@@ -19,20 +19,35 @@ export default function Register(){
     });
   };
 
- const handleSubmit = async (e)=>{
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const res = await fetch("https://certificate-backend.onrender.com/api/auth/register", {
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify(formData)
-  });
+  try {
 
-  const data = await res.json();
+    const res = await fetch(
+      "https://certificate-backend.onrender.com/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
-  alert(data.message);
+    const text = await res.text(); // safer
+    const data = JSON.parse(text);
+
+    if (res.ok) {
+      alert(data.message);
+    } else {
+      alert(data.message || "Registration failed");
+    }
+
+  } catch (error) {
+    console.log(error);
+    alert("Server error");
+  }
 };
 
   return(
