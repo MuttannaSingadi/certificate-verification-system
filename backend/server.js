@@ -1,9 +1,11 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 const app = express();
 
@@ -13,8 +15,8 @@ connectDB();
 /* Middleware */
 app.use(cors({
   origin: "*",
-  methods: ["GET","POST","PUT","DELETE"],
-  allowedHeaders: ["Content-Type","Authorization"]
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
@@ -26,6 +28,12 @@ app.get("/", (req, res) => {
 
 /* Routes */
 app.use("/api/auth", authRoutes);
+app.use("/api/upload", uploadRoutes);
+
+/* Handle Unknown Routes */
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 /* Server */
 const PORT = process.env.PORT || 5000;
