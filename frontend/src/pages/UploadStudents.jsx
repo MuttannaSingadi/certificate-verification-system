@@ -22,7 +22,7 @@ export default function UploadStudents(){
 
     try{
 
-      const res = await fetch("https://certificate-backend.onrender.com/api/upload/students", {
+      const res = await fetch("https://certificate-verification-system-tpcf.onrender.com/api/upload/students", {
         method: "POST",
         body: formData
       });

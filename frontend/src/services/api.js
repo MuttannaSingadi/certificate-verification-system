@@ -1,3 +1,3 @@
-const API_BASE = "https://certificate-backend.onrender.com/api";
+const API = "https://certificate-verification-system-tpcf.onrender.com";
 
-export default API_BASE;
+export default API;
