@@ -6,6 +6,8 @@ const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const certificateRoutes = require("./routes/certificateRoutes");
+
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.get("/", (req, res) => {
 /* Routes */
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/certificates", certificateRoutes);
+
 
 /* Handle Unknown Routes */
 app.use((req, res) => {
