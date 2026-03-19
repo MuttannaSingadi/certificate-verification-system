@@ -10,8 +10,15 @@ exports.uploadStudents = async (req, res) => {
 
     const workbook = xlsx.read(req.file.buffer);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rawData = xlsx.utils.sheet_to_json(sheet);
 
-    const data = xlsx.utils.sheet_to_json(sheet);
+    // 🔥 FIX: map Excel columns to schema fields
+    const data = rawData.map((item, index) => ({
+      name: item.name || item.Name,
+      email: item.email || item.Email,
+      course: item.course || item.Course,
+      certificateId: item.certificateId || item["Certificate ID"] || `CERT${index + 1}`
+    }));
 
     await Certificate.insertMany(data);
 
