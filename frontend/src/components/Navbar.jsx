@@ -24,7 +24,7 @@ export default function Navbar() {
       {/* NAV LINKS */}
       <ul className={menuOpen ? "nav-links active" : "nav-links"}>
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/search">Verify</Link></li>
+       <li><Link to="/searchcertificate">Verify</Link></li>
         <li><Link to="/login">Login</Link></li>
         <li><Link to="/register">Register</Link></li>
       </ul>
