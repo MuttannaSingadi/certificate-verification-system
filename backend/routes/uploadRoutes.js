@@ -9,4 +9,4 @@ const upload = multer({ storage });
 
 router.post("/students", upload.single("file"), uploadStudents);
 
-module.exports = router;   
+module.exports = router;
