@@ -15,7 +15,7 @@ export default function Home() {
     }
 
     // ✅ pass data using state
-    navigate("/search", { state: { certificateId } });
+    navigate("/searchCertificate", { state: { certificateId } });
   };
 
   return (
