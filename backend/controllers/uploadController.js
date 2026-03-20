@@ -3,7 +3,6 @@ const Certificate = require("../models/Certificate");
 
 exports.uploadStudents = async (req, res) => {
   try {
-
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -12,17 +11,41 @@ exports.uploadStudents = async (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rawData = xlsx.utils.sheet_to_json(sheet);
 
-    // 🔥 FIX: map Excel columns to schema fields
+    // 🔥 Map Excel → DB schema
     const data = rawData.map((item, index) => ({
       name: item.name || item.Name,
       email: item.email || item.Email,
       course: item.course || item.Course,
-      certificateId: item.certificateId || item["Certificate ID"] || `CERT${index + 1}`
+      certificateId:
+        item.certificateId ||
+        item["Certificate ID"] ||
+        `CERT${Date.now()}${index}` // unique fallback
     }));
 
-    await Certificate.insertMany(data);
+    // 🔥 Insert with duplicate skip
+    let insertedCount = 0;
 
-    res.json({ message: "Students uploaded successfully" });
+    try {
+      const result = await Certificate.insertMany(data, {
+        ordered: false // ✅ skip duplicates
+      });
+
+      insertedCount = result.length;
+
+    } catch (err) {
+      // ⚠️ Mongo throws error for duplicates but still inserts valid ones
+      if (err.writeErrors) {
+        insertedCount = err.result.result.nInserted;
+      } else {
+        throw err;
+      }
+    }
+
+    res.json({
+      message: "Upload completed",
+      inserted: insertedCount,
+      total: data.length
+    });
 
   } catch (error) {
     console.error(error);
