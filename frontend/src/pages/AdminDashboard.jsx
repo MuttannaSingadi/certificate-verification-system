@@ -13,6 +13,7 @@ export default function AdminDashboard() {
 
     const [certificates, setCertificates] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
+    const [originalId, setOriginalId] = useState(null); // 🔥 important
 
     const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
@@ -74,17 +75,25 @@ export default function AdminDashboard() {
     // EDIT
     const handleEdit = (cert) => {
         setForm(cert);
+        setOriginalId(cert.certificateId); // 🔥 store original ID
         setIsEditing(true);
     };
 
     // UPDATE
     const handleUpdate = async () => {
         try {
-            await fetch(`${API}/${form.certificateId}`, {
+            const res = await fetch(`${API}/${originalId}`, { // 🔥 use original ID
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form)
             });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert(data.message || "Update failed");
+                return;
+            }
 
             alert("Updated successfully");
 
@@ -104,6 +113,7 @@ export default function AdminDashboard() {
             course: "",
             certificateId: ""
         });
+        setOriginalId(null);
         setIsEditing(false);
     };
 
@@ -121,7 +131,16 @@ export default function AdminDashboard() {
                     <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
                     <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
                     <input name="course" placeholder="Course" value={form.course} onChange={handleChange} required />
-                    <input name="certificateId" placeholder="Certificate ID" value={form.certificateId} onChange={handleChange} required />
+
+                    {/* 🔥 Disable ID while editing */}
+                    <input 
+                        name="certificateId"
+                        placeholder="Certificate ID"
+                        value={form.certificateId}
+                        onChange={handleChange}
+                        required
+                        disabled={isEditing}
+                    />
 
                     {!isEditing ? (
                         <button type="submit">➕ Add</button>

@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 });
 
 
-// 🔥 GENERATE CERTIFICATE (MOVE THIS UP)
+// 🔥 GENERATE CERTIFICATE (must be above :id)
 router.post("/generate/:id", generateCertificate);
 
 
@@ -53,12 +53,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Certificate already exists" });
     }
 
-    const newCert = new Certificate({
-      name,
-      email,
-      course,
-      certificateId
-    });
+    const newCert = new Certificate({ name, email, course, certificateId });
 
     await newCert.save();
 
