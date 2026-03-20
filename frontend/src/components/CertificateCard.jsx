@@ -1,6 +1,9 @@
 import "../styles/certificate.css";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function CertificateCard({ data }) {
+
+    if (!data) return null; // safety check
 
     return (
         <div className="certificate-container">
@@ -9,12 +12,9 @@ export default function CertificateCard({ data }) {
 
                 {/* Top Logo */}
                 <div className="cert-header">
-                    <img 
-                        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-                        alt="logo"
-                        className="cert-logo"
-                    />
-                    <h2>SecureCert</h2>
+                    <div className="logo">
+                        <img src="/logo_1.png" alt="logo" />
+                    </div>
                 </div>
 
                 <h1 className="cert-title">Certificate of Completion</h1>
@@ -33,12 +33,20 @@ export default function CertificateCard({ data }) {
 
                 <p className="cert-email">{data.email}</p>
 
+                {/* QR Code */}
+                <div className="qr-section">
+                    <QRCodeCanvas
+                        value={`https://certificate-verification-system-black.vercel.app/verify/${data.certificateId}`}
+                        size={90}
+                    />
+                </div>
+
                 {/* Footer */}
                 <div className="cert-footer">
 
                     <div className="signature">
-                        <img 
-                            src="https://upload.wikimedia.org/wikipedia/commons/8/89/Signature_example.png" 
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/8/89/Signature_example.png"
                             alt="sign"
                         />
                         <p>Authorized Signature</p>
