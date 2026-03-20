@@ -12,7 +12,7 @@ export default function Dashboard() {
 
       <div className="dashboard">
 
-        <h1>📊 Admin Dashboard</h1>
+        <h1>📊 Student Dashboard</h1>
 
         <p className="dashboard-subtitle">
           Manage student certificates and verification system
