@@ -9,29 +9,25 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleVerify = () => {
-    if (!certificateId) {
+    if (!certificateId.trim()) {
       alert("Enter certificate ID");
       return;
     }
 
-    navigate(`/search/${certificateId}`);
+    // ✅ pass data using state
+    navigate("/search", { state: { certificateId } });
   };
 
   return (
     <>
       <Navbar />
 
-      {/* HERO SECTION */}
-
       <section className="hero">
-
         <div className="container">
-
           <h1>Certificate Verification System</h1>
 
           <p>
-            Verify student certificates quickly and securely using our digital
-            verification platform.
+            Verify student certificates quickly and securely using our digital platform.
           </p>
 
           <div className="verify-box">

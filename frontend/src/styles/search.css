@@ -137,3 +137,17 @@
     font-size: 14px;
   }
 }
+
+.view-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #2d5be3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background: #1a3db8;
+}

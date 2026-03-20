@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "../styles/search.css";
 
@@ -9,9 +10,24 @@ export default function SearchCertificate() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const handleSearch = async () => {
+    const location = useLocation();
+    const navigate = useNavigate();
 
-        if (!certificateId) {
+    // ✅ AUTO LOAD FROM HOME PAGE
+    useEffect(() => {
+        if (location.state?.certificateId) {
+            const id = location.state.certificateId;
+            setCertificateId(id);
+            handleSearch(id);
+        }
+    }, [location.state]);
+
+    // ✅ SEARCH FUNCTION
+    const handleSearch = async (idParam) => {
+
+        const id = idParam || certificateId;
+
+        if (!id) {
             setError("⚠️ Please enter Certificate ID");
             return;
         }
@@ -22,7 +38,7 @@ export default function SearchCertificate() {
 
         try {
             const res = await fetch(
-                `https://certificate-verification-system-tpcf.onrender.com/api/certificates/${certificateId}`
+                `https://certificate-verification-system-tpcf.onrender.com/api/certificates/${id}`
             );
 
             if (!res.ok) {
@@ -32,7 +48,12 @@ export default function SearchCertificate() {
             }
 
             const data = await res.json();
+
+            // ✅ OPTION 1: show here
             setResult(data);
+
+            // ✅ OPTION 2 (BETTER UX): go to certificate page
+            // navigate("/certificate", { state: data });
 
         } catch (error) {
             console.log(error);
@@ -63,7 +84,7 @@ export default function SearchCertificate() {
                         onChange={(e) => setCertificateId(e.target.value)}
                     />
 
-                    <button onClick={handleSearch}>
+                    <button onClick={() => handleSearch()}>
                         🔍 Verify
                     </button>
 
@@ -81,6 +102,14 @@ export default function SearchCertificate() {
                         <p><b>📧 Email:</b> {result.email}</p>
                         <p><b>📘 Course:</b> {result.course}</p>
                         <p><b>🆔 Certificate ID:</b> {result.certificateId}</p>
+
+                        {/* 🔥 EXTRA BUTTON */}
+                        <button 
+                            className="view-btn"
+                            onClick={() => navigate("/certificate", { state: result })}
+                        >
+                            📄 View Full Certificate
+                        </button>
 
                     </div>
                 )}
