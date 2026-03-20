@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Certificate = require("../models/Certificate");
 
-// 🔥 ADD THIS
 const { generateCertificate } = require("../controllers/certificateController");
 
 
@@ -15,6 +14,10 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+// 🔥 GENERATE CERTIFICATE (MOVE THIS UP)
+router.post("/generate/:id", generateCertificate);
 
 
 // ✅ GET CERTIFICATE BY ID
@@ -70,8 +73,44 @@ router.post("/", async (req, res) => {
 });
 
 
-// 🔥 NEW ROUTE (ADD THIS AT END)
-router.post("/generate/:id", generateCertificate);
+// ✅ UPDATE certificate
+router.put("/:id", async (req, res) => {
+  try {
+    const updated = await Certificate.findOneAndUpdate(
+      { certificateId: req.params.id },
+      req.body,
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json(updated);
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// ✅ DELETE certificate
+router.delete("/:id", async (req, res) => {
+  try {
+    const cert = await Certificate.findOneAndDelete({
+      certificateId: req.params.id
+    });
+
+    if (!cert) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json({ message: "Deleted successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 module.exports = router;
