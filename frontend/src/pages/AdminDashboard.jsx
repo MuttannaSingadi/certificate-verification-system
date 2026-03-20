@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import "../styles/admin.css";
+import * as XLSX from "xlsx";
 
 export default function AdminDashboard() {
 
@@ -13,17 +14,17 @@ export default function AdminDashboard() {
 
     const [certificates, setCertificates] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
-    const [originalId, setOriginalId] = useState(null); // 🔥 important
+    const [originalId, setOriginalId] = useState(null);
+    const [search, setSearch] = useState("");
 
     const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
-    // Fetch all certificates
     const fetchCertificates = async () => {
         try {
             const res = await fetch(API);
             const data = await res.json();
             setCertificates(data);
-        } catch (err) {
+        } catch {
             console.error("Error fetching data");
         }
     };
@@ -32,90 +33,71 @@ export default function AdminDashboard() {
         fetchCertificates();
     }, []);
 
-    // Handle input
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // ADD
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const res = await fetch(API, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form)
-            });
+        const res = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(form)
+        });
 
-            const data = await res.json();
-            alert(data.message);
+        const data = await res.json();
+        alert(data.message);
 
-            fetchCertificates();
-            resetForm();
-
-        } catch {
-            alert("Error adding certificate");
-        }
+        fetchCertificates();
+        resetForm();
     };
 
-    // DELETE
     const handleDelete = async (id) => {
         if (!window.confirm("Delete this certificate?")) return;
 
-        try {
-            await fetch(`${API}/${id}`, { method: "DELETE" });
-            alert("Deleted successfully");
-            fetchCertificates();
-        } catch {
-            alert("Delete failed");
-        }
+        await fetch(`${API}/${id}`, { method: "DELETE" });
+        alert("Deleted successfully");
+        fetchCertificates();
     };
 
-    // EDIT
     const handleEdit = (cert) => {
         setForm(cert);
-        setOriginalId(cert.certificateId); // 🔥 store original ID
+        setOriginalId(cert.certificateId);
         setIsEditing(true);
     };
 
-    // UPDATE
     const handleUpdate = async () => {
-        try {
-            const res = await fetch(`${API}/${originalId}`, { // 🔥 use original ID
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form)
-            });
+        await fetch(`${API}/${originalId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(form)
+        });
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                alert(data.message || "Update failed");
-                return;
-            }
-
-            alert("Updated successfully");
-
-            fetchCertificates();
-            resetForm();
-
-        } catch {
-            alert("Update failed");
-        }
+        alert("Updated successfully");
+        fetchCertificates();
+        resetForm();
     };
 
-    // RESET FORM
     const resetForm = () => {
-        setForm({
-            name: "",
-            email: "",
-            course: "",
-            certificateId: ""
-        });
+        setForm({ name: "", email: "", course: "", certificateId: "" });
         setOriginalId(null);
         setIsEditing(false);
     };
+
+    // 🔥 Export Excel
+    const exportExcel = () => {
+        const ws = XLSX.utils.json_to_sheet(certificates);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Certificates");
+        XLSX.writeFile(wb, "certificates.xlsx");
+    };
+
+    // 🔍 Filter
+    const filtered = certificates.filter(cert =>
+        cert.name.toLowerCase().includes(search.toLowerCase()) ||
+        cert.certificateId.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <>
@@ -125,21 +107,25 @@ export default function AdminDashboard() {
 
                 <h2>🛠 Admin Dashboard</h2>
 
+                {/* 📊 Stats */}
+                <div className="stats">
+                    <div className="card">📄 Total: {certificates.length}</div>
+                    <div className="card">📚 Courses: {new Set(certificates.map(c => c.course)).size}</div>
+                </div>
+
                 {/* FORM */}
                 <form className="admin-form" onSubmit={handleSubmit}>
-
                     <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
                     <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
                     <input name="course" placeholder="Course" value={form.course} onChange={handleChange} required />
 
-                    {/* 🔥 Disable ID while editing */}
-                    <input 
+                    <input
                         name="certificateId"
                         placeholder="Certificate ID"
                         value={form.certificateId}
                         onChange={handleChange}
-                        required
                         disabled={isEditing}
+                        required
                     />
 
                     {!isEditing ? (
@@ -150,8 +136,20 @@ export default function AdminDashboard() {
                             <button type="button" onClick={resetForm}>Cancel</button>
                         </>
                     )}
-
                 </form>
+
+                {/* 🔍 Search + Export */}
+                <div className="actions-bar">
+                    <input
+                        className="search-input"
+                        placeholder="Search by Name or ID"
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+
+                    <button className="export-btn" onClick={exportExcel}>
+                        📥 Export Excel
+                    </button>
+                </div>
 
                 {/* TABLE */}
                 <div className="table-container">
@@ -170,7 +168,7 @@ export default function AdminDashboard() {
                         </thead>
 
                         <tbody>
-                            {certificates.map((cert) => (
+                            {filtered.map((cert) => (
                                 <tr key={cert.certificateId}>
                                     <td>{cert.name}</td>
                                     <td>{cert.email}</td>
