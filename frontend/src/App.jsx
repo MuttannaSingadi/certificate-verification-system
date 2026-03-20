@@ -23,7 +23,7 @@ function App() {
         <Route path="/searchcertificate" element={<SearchCertificate />} />
         <Route path="/certificate" element={<CertificateDetails />} />
         <Route path="/generatecertificate" element={<GenerateCertificate />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );
