@@ -12,71 +12,99 @@ export default function AdminDashboard() {
     });
 
     const [certificates, setCertificates] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
     // Fetch all certificates
     const fetchCertificates = async () => {
-        const res = await fetch("https://certificate-verification-system-tpcf.onrender.com/api/certificates");
-        const data = await res.json();
-        setCertificates(data);
+        try {
+            const res = await fetch(API);
+            const data = await res.json();
+            setCertificates(data);
+        } catch (err) {
+            console.error("Error fetching data");
+        }
     };
 
     useEffect(() => {
         fetchCertificates();
     }, []);
 
-    // Handle form input
+    // Handle input
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // Add certificate
+    // ADD
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const res = await fetch("https://certificate-verification-system-tpcf.onrender.com/api/certificates", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(form)
-        });
+        try {
+            const res = await fetch(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form)
+            });
 
-        const data = await res.json();
-        alert(data.message);
+            const data = await res.json();
+            alert(data.message);
 
-        fetchCertificates(); // refresh list
+            fetchCertificates();
+            resetForm();
 
+        } catch {
+            alert("Error adding certificate");
+        }
+    };
+
+    // DELETE
+    const handleDelete = async (id) => {
+        if (!window.confirm("Delete this certificate?")) return;
+
+        try {
+            await fetch(`${API}/${id}`, { method: "DELETE" });
+            alert("Deleted successfully");
+            fetchCertificates();
+        } catch {
+            alert("Delete failed");
+        }
+    };
+
+    // EDIT
+    const handleEdit = (cert) => {
+        setForm(cert);
+        setIsEditing(true);
+    };
+
+    // UPDATE
+    const handleUpdate = async () => {
+        try {
+            await fetch(`${API}/${form.certificateId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form)
+            });
+
+            alert("Updated successfully");
+
+            fetchCertificates();
+            resetForm();
+
+        } catch {
+            alert("Update failed");
+        }
+    };
+
+    // RESET FORM
+    const resetForm = () => {
         setForm({
             name: "",
             email: "",
             course: "",
             certificateId: ""
         });
-    };
-
-    // DELETE
-    const handleDelete = async (id) => {
-        await fetch(`https://certificate-verification-system-tpcf.onrender.com/api/certificates/${id}`, {
-            method: "DELETE"
-        });
-
-        fetchCertificates();
-    };
-
-    // EDIT (fill form)
-    const handleEdit = (cert) => {
-        setForm(cert);
-    };
-
-    // UPDATE
-    const handleUpdate = async () => {
-        await fetch(`https://certificate-verification-system-tpcf.onrender.com/api/certificates/${form.certificateId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form)
-        });
-
-        fetchCertificates();
+        setIsEditing(false);
     };
 
     return (
@@ -87,20 +115,26 @@ export default function AdminDashboard() {
 
                 <h2>🛠 Admin Dashboard</h2>
 
-                {/* Form */}
+                {/* FORM */}
                 <form className="admin-form" onSubmit={handleSubmit}>
 
-                    <input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
-                    <input name="email" placeholder="Email" value={form.email} onChange={handleChange} />
-                    <input name="course" placeholder="Course" value={form.course} onChange={handleChange} />
-                    <input name="certificateId" placeholder="Certificate ID" value={form.certificateId} onChange={handleChange} />
+                    <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
+                    <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
+                    <input name="course" placeholder="Course" value={form.course} onChange={handleChange} required />
+                    <input name="certificateId" placeholder="Certificate ID" value={form.certificateId} onChange={handleChange} required />
 
-                    <button type="submit">➕ Add</button>
-                    <button type="button" onClick={handleUpdate}>✏️ Update</button>
+                    {!isEditing ? (
+                        <button type="submit">➕ Add</button>
+                    ) : (
+                        <>
+                            <button type="button" onClick={handleUpdate}>✏️ Update</button>
+                            <button type="button" onClick={resetForm}>Cancel</button>
+                        </>
+                    )}
 
                 </form>
 
-                {/* Table */}
+                {/* TABLE */}
                 <div className="table-container">
 
                     <h3>📄 All Certificates</h3>
@@ -117,8 +151,8 @@ export default function AdminDashboard() {
                         </thead>
 
                         <tbody>
-                            {certificates.map((cert, index) => (
-                                <tr key={index}>
+                            {certificates.map((cert) => (
+                                <tr key={cert.certificateId}>
                                     <td>{cert.name}</td>
                                     <td>{cert.email}</td>
                                     <td>{cert.course}</td>
