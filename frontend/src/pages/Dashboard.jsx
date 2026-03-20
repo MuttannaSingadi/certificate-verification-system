@@ -12,7 +12,7 @@ export default function Dashboard() {
 
       <div className="dashboard">
 
-        <h1>Admin Dashboard</h1>
+        <h1>📊 Admin Dashboard</h1>
 
         <p className="dashboard-subtitle">
           Manage student certificates and verification system
@@ -20,27 +20,30 @@ export default function Dashboard() {
 
         <div className="dashboard-cards">
 
+          {/* Upload Students */}
           <div 
             className="card"
-            onClick={() => navigate("/UploadStudents")}
+            onClick={() => navigate("/uploadstudents")}   // ✅ FIXED
           >
-            <h3>Upload Students</h3>
+            <h3>📤 Upload Students</h3>
             <p>Upload Excel file containing student data</p>
           </div>
 
+          {/* Generate Certificates */}
           <div 
             className="card"
-            onClick={() => navigate("/generate-certificate")}
+            onClick={() => navigate("/generatecertificate")}
           >
-            <h3>Generate Certificates</h3>
+            <h3>🎓 Generate Certificates</h3>
             <p>Create certificates for uploaded students</p>
           </div>
 
+          {/* Search Certificate */}
           <div 
             className="card"
-            onClick={() => navigate("/search-certificate")}
+            onClick={() => navigate("/searchcertificate")}  // ✅ FIXED
           >
-            <h3>Search Certificate</h3>
+            <h3>🔍 Search Certificate</h3>
             <p>Verify certificate using ID</p>
           </div>
 

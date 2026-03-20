@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/certificates", certificateRoutes);
-
+app.use("/uploads", express.static("uploads"));
 
 /* Handle Unknown Routes */
 app.use((req, res) => {

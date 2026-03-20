@@ -6,8 +6,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import UploadStudents from "./pages/UploadStudents";
 import SearchCertificate from "./pages/SearchCertificate";
-import SearchCertificate from "./pages/SearchCertificate";
-
+import CertificateDetails from "./pages/CertificateDetails";
+import GenerateCertificate from "./pages/GenerateCertificate";
 
 function App() {
   return (
@@ -20,7 +20,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/uploadstudents" element={<UploadStudents />} />
         <Route path="/searchcertificate" element={<SearchCertificate />} />
-        
+        <Route path="/certificate" element={<CertificateDetails />} />
+        <Route path="/generatecertificate" element={<GenerateCertificate />} />
       </Routes>
     </BrowserRouter>
   );
