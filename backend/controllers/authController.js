@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const generateToken = (user) => {
@@ -12,34 +13,41 @@ const generateToken = (user) => {
   );
 };
 
-/* REGISTER */
 exports.registerUser = async (req, res) => {
   try {
+
     const { name, email, password, role } = req.body;
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({
+        message: "User already exists"
+      });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = new User({
       name,
       email,
-      password,
+      password: hashedPassword,
       role
     });
 
     await user.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({
+      message: "User registered successfully"
+    });
 
   } catch {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 };
 
-/* LOGIN */
 exports.loginUser = async (req, res) => {
   try {
 
@@ -47,13 +55,23 @@ exports.loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (!user || user.password !== password) {
-      return res.status(400).json({ message: "Invalid credentials" });
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found"
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Invalid password"
+      });
     }
 
     const token = generateToken(user);
 
-    res.json({
+    res.status(200).json({
       token,
       user: {
         name: user.name,
@@ -63,6 +81,8 @@ exports.loginUser = async (req, res) => {
     });
 
   } catch {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 };
