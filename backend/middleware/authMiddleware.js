@@ -3,36 +3,27 @@ const jwt = require("jsonwebtoken");
 const protect = (req, res, next) => {
   try {
 
-    let token;
+    const token = req.headers.authorization?.split(" ")[1];
 
-    // Check token from Authorization header
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      token = req.headers.authorization.split(" ")[1];
-    }
-
-    // If token not found
     if (!token) {
-      return res.status(401).json({
-        message: "Not authorized, token missing",
-      });
+      return res.status(401).json({ message: "No token" });
     }
 
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Attach user info to request
     req.user = decoded;
 
     next();
 
-  } catch (error) {
-    return res.status(401).json({
-      message: "Not authorized, invalid token",
-    });
+  } catch {
+    res.status(401).json({ message: "Invalid token" });
   }
 };
 
-module.exports = protect;
+const adminOnly = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Admin only access" });
+  }
+  next();
+};
+
+module.exports = { protect, adminOnly };

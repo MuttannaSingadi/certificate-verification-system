@@ -9,6 +9,7 @@ import SearchCertificate from "./pages/SearchCertificate";
 import CertificateDetails from "./pages/CertificateDetails";
 import GenerateCertificate from "./pages/GenerateCertificate";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -24,6 +25,12 @@ function App() {
         <Route path="/certificate" element={<CertificateDetails />} />
         <Route path="/generatecertificate" element={<GenerateCertificate />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } />
+
       </Routes>
     </BrowserRouter>
   );
