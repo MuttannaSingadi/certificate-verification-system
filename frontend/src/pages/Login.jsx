@@ -19,30 +19,34 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch(
-      "https://certificate-verification-system-tpcf.onrender.com/api/auth/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      }
-    );
+    try {
+      const res = await fetch(
+        "https://certificate-verification-system-tpcf.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        }
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+        if (data.user.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/dashboard");
+        }
 
-      if (data.user.role === "admin") {
-        navigate("/admindashboard");
       } else {
-        navigate("/dashboard");
+        alert(data.message);
       }
 
-    } else {
-      alert(data.message);
+    } catch (error) {
+      alert("Server error");
     }
   };
 
@@ -50,13 +54,46 @@ export default function Login() {
     <>
       <Navbar />
 
-      <form onSubmit={handleSubmit}>
-        <input name="email" onChange={handleChange} />
-        <input name="password" type="password" onChange={handleChange} />
-        <button>Login</button>
-      </form>
+      <div className="login-container">
 
-      <Link to="/register">Register</Link>
+        <div className="login-card">
+
+          <h2>Login</h2>
+
+          <form onSubmit={handleSubmit}>
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
+            <button type="submit">Login</button>
+
+          </form>
+
+          <p className="register-link">
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
+          <p className="register-link">
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
+
+        </div>
+
+      </div>
     </>
   );
 }
