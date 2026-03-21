@@ -17,6 +17,10 @@ export default function AdminDashboard() {
     const [originalId, setOriginalId] = useState(null);
     const [search, setSearch] = useState("");
 
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [message, setMessage] = useState("");
+
     const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
     const fetchCertificates = async () => {
@@ -46,19 +50,35 @@ export default function AdminDashboard() {
             body: JSON.stringify(form)
         });
 
-        const data = await res.json();
-        alert(data.message);
+        await res.json();
 
+        setMessage("Certificate added successfully");
         fetchCertificates();
         resetForm();
+
+        setTimeout(() => setMessage(""), 2000);
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("Delete this certificate?")) return;
+    const handleDeleteClick = (id) => {
+        setDeleteId(id);
+        setShowConfirm(true);
+    };
 
-        await fetch(`${API}/${id}`, { method: "DELETE" });
-        alert("Deleted successfully");
+    const confirmDelete = async () => {
+        await fetch(`${API}/${deleteId}`, { method: "DELETE" });
+
+        setMessage("Certificate deleted successfully");
+
+        setShowConfirm(false);
+        setDeleteId(null);
         fetchCertificates();
+
+        setTimeout(() => setMessage(""), 2000);
+    };
+
+    const cancelDelete = () => {
+        setShowConfirm(false);
+        setDeleteId(null);
     };
 
     const handleEdit = (cert) => {
@@ -74,9 +94,11 @@ export default function AdminDashboard() {
             body: JSON.stringify(form)
         });
 
-        alert("Updated successfully");
+        setMessage("Certificate updated successfully");
         fetchCertificates();
         resetForm();
+
+        setTimeout(() => setMessage(""), 2000);
     };
 
     const resetForm = () => {
@@ -85,7 +107,6 @@ export default function AdminDashboard() {
         setIsEditing(false);
     };
 
-    // 🔥 Export Excel
     const exportExcel = () => {
         const ws = XLSX.utils.json_to_sheet(certificates);
         const wb = XLSX.utils.book_new();
@@ -93,7 +114,6 @@ export default function AdminDashboard() {
         XLSX.writeFile(wb, "certificates.xlsx");
     };
 
-    // 🔍 Filter
     const filtered = certificates.filter(cert =>
         cert.name.toLowerCase().includes(search.toLowerCase()) ||
         cert.certificateId.toLowerCase().includes(search.toLowerCase())
@@ -105,15 +125,34 @@ export default function AdminDashboard() {
 
             <div className="admin-container">
 
+                {message && <div className="success-msg">✅ {message}</div>}
+
                 <h2>🛠 Admin Dashboard</h2>
 
-                {/* 📊 Stats */}
+                <div className="system-info">
+                    <h3>📌 Certificate Verification System</h3>
+                    <p>
+                        Manage and verify digital certificates. Each certificate contains a unique ID used for validation.
+                    </p>
+                </div>
+
                 <div className="stats">
                     <div className="card">📄 Total: {certificates.length}</div>
                     <div className="card">📚 Courses: {new Set(certificates.map(c => c.course)).size}</div>
+                    <div className="card">👤 Users: {new Set(certificates.map(c => c.email)).size}</div>
+                    <div className="card">🆕 Latest: {certificates[certificates.length - 1]?.certificateId || "N/A"}</div>
                 </div>
 
-                {/* FORM */}
+                <div className="admin-actions">
+                    <button onClick={exportExcel}>📥 Export</button>
+                    <button onClick={fetchCertificates}>🔄 Refresh</button>
+                    <button onClick={resetForm}>🧹 Clear</button>
+                </div>
+
+                <div className="info-box">
+                    ✅ Each certificate ID is unique and can be verified by users.
+                </div>
+
                 <form className="admin-form" onSubmit={handleSubmit}>
                     <input name="name" placeholder="Name" value={form.name} onChange={handleChange} required />
                     <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
@@ -138,7 +177,6 @@ export default function AdminDashboard() {
                     )}
                 </form>
 
-                {/* 🔍 Search + Export */}
                 <div className="actions-bar">
                     <input
                         className="search-input"
@@ -151,40 +189,61 @@ export default function AdminDashboard() {
                     </button>
                 </div>
 
-                {/* TABLE */}
-                <div className="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
 
-                    <h3>📄 All Certificates</h3>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Course</th>
-                                <th>ID</th>
-                                <th>Actions</th>
+                    <tbody>
+                        {filtered.map((cert) => (
+                            <tr key={cert.certificateId}>
+                                <td>{cert.name}</td>
+                                <td>{cert.email}</td>
+                                <td>{cert.course}</td>
+                                <td>{cert.certificateId}</td>
+                                <td>
+                                    <button onClick={() => handleDeleteClick(cert.certificateId)}>❌</button>
+                                    <button onClick={() => handleEdit(cert)}>✏️</button>
+                                </td>
                             </tr>
-                        </thead>
+                        ))}
+                    </tbody>
+                </table>
 
-                        <tbody>
-                            {filtered.map((cert) => (
-                                <tr key={cert.certificateId}>
-                                    <td>{cert.name}</td>
-                                    <td>{cert.email}</td>
-                                    <td>{cert.course}</td>
-                                    <td>{cert.certificateId}</td>
-                                    <td>
-                                        <button onClick={() => handleDelete(cert.certificateId)}>❌</button>
-                                        <button onClick={() => handleEdit(cert)}>✏️</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-
-                    </table>
-
+                <div className="recent-activity">
+                    <h3>🕒 Recent Certificates</h3>
+                    <ul>
+                        {certificates.slice(-5).reverse().map(cert => (
+                            <li key={cert.certificateId}>
+                                {cert.name} - {cert.course}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
+
+                <div className="footer">
+                    © 2026 Certificate Verification System
+                </div>
+
+                {showConfirm && (
+                    <div className="modal-overlay">
+                        <div className="modal-box">
+                            <h3>⚠️ Confirm Delete</h3>
+                            <p>Are you sure you want to delete this certificate?</p>
+
+                            <div className="modal-buttons">
+                                <button className="cancel" onClick={cancelDelete}>Cancel</button>
+                                <button className="delete" onClick={confirmDelete}>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </>

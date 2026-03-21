@@ -25,7 +25,7 @@ export default function Login() {
     try {
 
       const res = await fetch(
-       "https://certificate-verification-system-tpcf.onrender.com/api/auth/login",
+        "https://certificate-verification-system-tpcf.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: {
@@ -38,10 +38,17 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        alert(data.message || "Login successful");
-        navigate("/dashboard");
+
+        const role = data.user.role;
+
+        if (role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
+
       } else {
-        alert(data.message || "Login failed");
+        alert(data.message);
       }
 
     } catch (error) {

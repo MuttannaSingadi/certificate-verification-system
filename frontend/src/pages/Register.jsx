@@ -9,7 +9,8 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    role: "student"
   });
 
   const handleChange = (e) => {
@@ -28,7 +29,6 @@ export default function Register() {
     }
 
     try {
-
       const res = await fetch(
         "https://certificate-verification-system-tpcf.onrender.com/api/auth/register",
         {
@@ -39,7 +39,8 @@ export default function Register() {
           body: JSON.stringify({
             name: formData.name,
             email: formData.email,
-            password: formData.password
+            password: formData.password,
+            role: formData.role
           })
         }
       );
@@ -69,6 +70,15 @@ export default function Register() {
           <h2>Create Account</h2>
 
           <form onSubmit={handleSubmit}>
+
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="student">Student</option>
+              <option value="admin">Admin</option>
+            </select>
 
             <input
               type="text"
