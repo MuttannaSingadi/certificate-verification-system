@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -9,27 +10,72 @@ import SearchCertificate from "./pages/SearchCertificate";
 import CertificateDetails from "./pages/CertificateDetails";
 import GenerateCertificate from "./pages/GenerateCertificate";
 import AdminDashboard from "./pages/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
+        {/* PUBLIC */}
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/uploadstudents" element={<UploadStudents />} />
-        <Route path="/searchcertificate" element={<SearchCertificate />} />
-        <Route path="/certificate" element={<CertificateDetails />} />
-        <Route path="/generatecertificate" element={<GenerateCertificate />} />
-        <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
+        <Route path="/register" element={<Register />} />
+
+        {/* USER */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/searchcertificate"
+          element={
+            <ProtectedRoute>
+              <SearchCertificate />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/certificate"
+          element={
+            <ProtectedRoute>
+              <CertificateDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN */}
+        <Route
+          path="/admindashboard"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/uploadstudents"
+          element={
+            <ProtectedRoute role="admin">
+              <UploadStudents />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/generatecertificate"
+          element={
+            <ProtectedRoute role="admin">
+              <GenerateCertificate />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </BrowserRouter>
