@@ -1,273 +1,216 @@
-/* ===== BACKGROUND (MODERN + TEXTURE) ===== */
+/* BACKGROUND */
 .certificate-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-
-    background: linear-gradient(135deg, #e0e7ff, #f8fafc),
-                url("https://www.transparenttextures.com/patterns/cubes.png");
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #eef2ff;
+  padding: 20px;
 }
 
-/* ===== CERTIFICATE CARD ===== */
+/* CARD */
 .certificate-card {
-    width: 850px;
-    max-width: 95%;
-    padding: 70px 40px 50px;
-    border-radius: 20px;
-    position: relative;
-    text-align: center;
-    overflow: hidden;
-
-    background: #ffffff;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-    border: 2px solid rgba(45,91,227,0.2);
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  padding: 50px;
+  border-radius: 15px;
+  text-align: center;
+  position: relative;
+  border: 8px solid #1e3a8a;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
 }
 
-/* ===== TOP BORDER DESIGN ===== */
-.certificate-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 6px;
-    width: 100%;
-    background: linear-gradient(90deg, #2d5be3, #22c55e);
-}
-
-/* ===== WATERMARK ===== */
-.certificate-card::after {
-    content: "SECURECERT";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-30deg);
-    font-size: 70px;
-    color: rgba(0,0,0,0.04);
-    pointer-events: none;
-}
-
-/* ===== HEADER (LOGO LEFT) ===== */
+/* HEADER */
 .cert-header {
-    position: absolute;
-    top: 20px;
-    left: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.cert-header h1 {
+  color: #1e3a8a;
+  font-size: 32px;
+  text-align: center;
+  width: 100%;
 }
 
 .cert-logo {
-    width: 45px;
+  width: 80px;
+  margin-bottom: 10px;
 }
 
-.cert-header h2 {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1e3a8a;
-}
-
-/* ===== QR CODE (TOP RIGHT) ===== */
-.qr-section {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-
-    background: white;
-    padding: 6px;
-    border-radius: 10px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-}
-
-/* ===== TITLE ===== */
-.cert-title {
-    font-size: 32px;
-    margin-top: 50px;
-    color: #1e3a8a;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-/* ===== TEXT ===== */
-.cert-text {
-    color: #555;
-    margin: 6px 0;
-    font-size: 15px;
-}
-
-/* ===== NAME ===== */
+/* NAME */
 .cert-name {
-    font-size: 36px;
-    font-weight: 700;
-    color: #111;
-    margin: 18px 0;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #000;
+  margin: 20px 0;
+  letter-spacing: 2px;
 }
 
-/* ===== COURSE ===== */
+/* COURSE */
 .cert-course {
-    font-size: 22px;
-    color: #2d5be3;
-    font-weight: 600;
+  font-size: 24px;
+  color: #2563eb;
+  margin: 10px 0;
 }
 
-/* ===== ID ===== */
-.cert-id {
-    margin-top: 18px;
-    font-size: 14px;
-    color: #444;
+/* DATE */
+.cert-date {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
 }
 
-/* ===== EMAIL ===== */
-.cert-email {
-    font-size: 13px;
-    color: #888;
+/* WATERMARK */
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 60px;
+  color: rgba(0,0,0,0.05);
+  transform: translate(-50%, -50%) rotate(-30deg);
+  pointer-events: none;
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .cert-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 50px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-/* ===== SIGNATURE ===== */
-.signature {
-    text-align: center;
+.cert-footer .left,
+.cert-footer .center,
+.cert-footer .right {
+  text-align: center;
+  flex: 1;
 }
 
-.signature img {
-    width: 130px;
+/* QR */
+.cert-footer .left canvas {
+  margin-bottom: 5px;
 }
 
-.signature p {
-    font-size: 12px;
-    color: #555;
+/* SIGNATURE */
+.cert-footer .right img {
+  width: 120px;
 }
 
-/* ===== SEAL ===== */
-.seal {
-    background: linear-gradient(135deg, #2d5be3, #1a3db8);
-    color: white;
-    padding: 12px 20px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 6px 15px rgba(45,91,227,0.3);
+/* VERIFIED */
+.verified {
+  margin-top: 30px;
+  background: #2563eb;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  display: inline-block;
 }
 
-/* ===== ACTION BUTTON ===== */
+/* BUTTONS */
 .actions {
-    margin-top: 30px;
+  margin-top: 20px;
 }
 
 .actions button {
-    padding: 12px 28px;
-    background: linear-gradient(135deg, #2d5be3, #1a3db8);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 15px;
-    transition: 0.3s;
+  margin: 5px;
+  padding: 10px 20px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
 .actions button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(45,91,227,0.4);
+  background: #1d4ed8;
 }
 
-.cert-date {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #333;
-}
+/* ========================= */
+/* 📱 MOBILE RESPONSIVE */
+/* ========================= */
 
-/* ===== RESPONSIVE ===== */
-
-/* Tablet */
 @media (max-width: 768px) {
-    .certificate-card {
-        padding: 40px 20px;
-    }
 
-    .cert-title {
-        font-size: 24px;
-        margin-top: 20px;
-    }
+  .certificate-card {
+    padding: 25px;
+  }
 
-    .cert-name {
-        font-size: 26px;
-    }
+  .cert-header {
+    align-items: center;
+  }
 
-    .cert-footer {
-        flex-direction: column;
-        gap: 20px;
-    }
+  .cert-logo {
+    width: 60px;
+  }
 
-    .cert-header {
-        position: static;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
+  .cert-name {
+    font-size: 24px;
+  }
 
-    .qr-section {
-        position: static;
-        margin-top: 20px;
-    }
+  .cert-course {
+    font-size: 18px;
+  }
+
+  .cert-date {
+    font-size: 14px;
+  }
+
+  .cert-footer {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .cert-footer .left,
+  .cert-footer .center,
+  .cert-footer .right {
+    width: 100%;
+  }
+
+  .cert-footer .right img {
+    width: 100px;
+  }
+
+  .actions button {
+    width: 100%;
+  }
 }
 
-/* Mobile */
-@media (max-width: 480px) {
-    .cert-name {
-        font-size: 22px;
-    }
+/* ========================= */
+/* 🖨️ PRINT ONLY CERTIFICATE */
+/* ========================= */
 
-    .cert-course {
-        font-size: 18px;
-    }
-
-    .actions button {
-        width: 100%;
-    }
-}
-
-/* ===== PRINT ===== */
 @media print {
-    body * {
-        visibility: hidden;
-    }
 
-    .certificate-card,
-    .certificate-card * {
-        visibility: visible;
-    }
+  body * {
+    visibility: hidden;
+  }
 
-    .certificate-card {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        box-shadow: none;
-        border: 2px solid #2d5be3;
-    }
+  .certificate-card,
+  .certificate-card * {
+    visibility: visible;
+  }
 
-    .actions {
-        display: none;
-    }
+  .certificate-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+  }
 
-    .certificate-container {
-        background: none;
-        padding: 0;
-    }
+  .actions {
+    display: none;
+  }
 
-    .qr-section {
-        top: 20px;
-        right: 20px;
-    }
+  .certificate-container {
+    background: white;
+  }
 }

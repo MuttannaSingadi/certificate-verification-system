@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
+
 import "../styles/register.css";
 
 export default function Register() {
@@ -61,7 +61,7 @@ export default function Register() {
 
   return (
     <>
-      <Navbar />
+     
 
       <div className="register-container">
 

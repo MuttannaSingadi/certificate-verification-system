@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
 
@@ -6,48 +6,110 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
 
+  const [certificateId, setCertificateId] = useState("");
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
+
+  const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
+
+  // 🔍 SEARCH CERTIFICATE
+  const handleSearch = async () => {
+    try {
+      setError("");
+      setResult(null);
+
+      if (!certificateId) {
+        setError("⚠️ Please enter Certificate ID");
+        return;
+      }
+
+      const res = await fetch(`${API}/${certificateId}`);
+      const data = await res.json();
+
+      if (!data || data.message) {
+        setError("❌ Certificate not found");
+      } else {
+        setResult(data);
+      }
+
+    } catch {
+      setError("⚠️ Server error");
+    }
+  };
+
+  // ⬇️ DOWNLOAD → Navigate to certificate page
+  const handleDownload = () => {
+    if (!result) return;
+    navigate("/certificate", { state: result });
+  };
+
+  // ✅ NAVBAR
+  const Navbar = () => (
+    <div className="dashboard-navbar">
+      <div className="logo">🎓 User Dashboard</div>
+
+      <div className="nav-links">
+        <button onClick={() => navigate("/")}>Home</button>
+        <button onClick={() => {
+          setResult(null);
+          setCertificateId("");
+        }}>
+          Clear
+        </button>
+        <button className="logout">Logout</button>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Navbar />
 
       <div className="dashboard">
 
-        <h1>📊 Student Dashboard</h1>
-
+        <h1>🎓 Certificate Verification</h1>
         <p className="dashboard-subtitle">
-          Manage student certificates and verification system
+          Search and verify your certificate instantly
         </p>
 
-        <div className="dashboard-cards">
-
-          {/* Upload Students */}
-          <div 
-            className="card"
-            onClick={() => navigate("/uploadstudents")}   // ✅ FIXED
-          >
-            <h3>📤 Upload Students</h3>
-            <p>Upload Excel file containing student data</p>
-          </div>
-
-          {/* Generate Certificates */}
-          <div 
-            className="card"
-            onClick={() => navigate("/generatecertificate")}
-          >
-            <h3>🎓 Generate Certificates</h3>
-            <p>Create certificates for uploaded students</p>
-          </div>
-
-          {/* Search Certificate */}
-          <div 
-            className="card"
-            onClick={() => navigate("/searchcertificate")}  // ✅ FIXED
-          >
-            <h3>🔍 Search Certificate</h3>
-            <p>Verify certificate using ID</p>
-          </div>
-
+        {/* 🔍 SEARCH BOX */}
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Enter Certificate ID"
+            value={certificateId}
+            onChange={(e) => setCertificateId(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search</button>
         </div>
+
+        {/* ❌ ERROR */}
+        {error && <div className="error">{error}</div>}
+
+        {/* ✅ RESULT */}
+        {result && (
+          <div className="result-card">
+            <h3>✅ Certificate Verified</h3>
+
+            <p><strong>Name:</strong> {result.name}</p>
+            <p><strong>Email:</strong> {result.email}</p>
+            <p><strong>Course:</strong> {result.course}</p>
+            <p><strong>ID:</strong> {result.certificateId}</p>
+
+            <p>
+              <strong>Date:</strong>{" "}
+              {result.completionDate
+                ? new Date(result.completionDate).toLocaleDateString()
+                : result.issueDate
+                  ? new Date(result.issueDate).toLocaleDateString()
+                  : "No Date"}
+            </p>
+
+            <button onClick={handleDownload} className="download-btn">
+              ⬇️ Download Certificate
+            </button>
+          </div>
+        )}
 
       </div>
     </>

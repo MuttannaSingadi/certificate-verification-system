@@ -1,40 +1,62 @@
 import "../styles/certificate.css";
 import { QRCodeCanvas } from "qrcode.react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { useRef } from "react";
 
 export default function CertificateCard({ data }) {
+
+    const certRef = useRef();
 
     if (!data) return null;
 
     const formattedDate =
         data.completionDate
             ? new Date(data.completionDate).toLocaleDateString("en-IN", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric"
-              })
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            })
             : data.issueDate
-            ? new Date(data.issueDate).toLocaleDateString("en-IN", {
-                  day: "2-digit",
-                  month: "long",
-                  year: "numeric"
-              })
-            : "N/A";
+                ? new Date(data.issueDate).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric"
+                })
+                : "N/A";
+
+    const handleDownload = async () => {
+        const element = certRef.current;
+
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            useCORS: true
+        });
+
+        const imgData = canvas.toDataURL("image/png");
+
+        const pdf = new jsPDF("landscape", "px", [
+            canvas.width,
+            canvas.height
+        ]);
+
+        pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+        pdf.save(`${data.name}_certificate.pdf`);
+    };
 
     return (
         <div className="certificate-container">
 
-            <div className="certificate-card">
+            <div className="certificate-card" ref={certRef}>
 
+                {/* HEADER */}
                 <div className="cert-header">
-                    <div className="logo">
-                        <img src="/logo_1.png" alt="logo" />
-                    </div>
+                    <img src="/logo_1.png" className="cert-logo" />
+                    <h1>Certificate of Completion</h1>
+                    <p>This is to certify that</p>
                 </div>
 
-                <h1 className="cert-title">Certificate of Completion</h1>
-
-                <p className="cert-text">This is to certify that</p>
-
+                {/* NAME */}
                 <h2 className="cert-name">{data.name}</h2>
 
                 <p className="cert-text">has successfully completed</p>
@@ -45,41 +67,41 @@ export default function CertificateCard({ data }) {
                     Completion Date: <b>{formattedDate}</b>
                 </p>
 
-                <p className="cert-id">
-                    Certificate ID: <b>{data.certificateId}</b>
-                </p>
+                {/* WATERMARK */}
+                <div className="watermark">SECURECERT</div>
 
-                <p className="cert-email">{data.email}</p>
-
-                <div className="qr-section">
-                    <QRCodeCanvas
-                        value={`https://certificate-verification-system-black.vercel.app/verify/${data.certificateId}`}
-                        size={90}
-                    />
-                </div>
-
+                {/* FOOTER */}
                 <div className="cert-footer">
 
-                    <div className="signature">
-                        <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/8/89/Signature_example.png"
-                            alt="sign"
+                    <div className="left">
+                        <QRCodeCanvas
+                            value={`https://certificate-verification-system-black.vercel.app/verify/${data.certificateId}`}
+                            size={100}
                         />
+                        <p>Scan to Verify</p>
+                    </div>
+
+                    <div className="center">
+                        <p>ID: {data.certificateId}</p>
+                        <p>{data.email}</p>
+                    </div>
+
+                    <div className="right">
+                        <img src="/signature.png" alt="sign" />
                         <p>Authorized Signature</p>
                     </div>
 
-                    <div className="seal">
-                        🏅 Verified
-                    </div>
-
                 </div>
 
-                <div className="actions">
-                    <button onClick={() => window.print()}>
-                        🖨️ Print
-                    </button>
-                </div>
+                {/* VERIFIED */}
+                <div className="verified">✔ Verified Certificate</div>
 
+            </div>
+
+            {/* BUTTONS */}
+            <div className="actions">
+                <button onClick={handleDownload}>Download PDF</button>
+                <button onClick={() => window.print()}>Print</button>
             </div>
 
         </div>

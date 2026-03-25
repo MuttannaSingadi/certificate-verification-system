@@ -1,67 +1,150 @@
-.register-container{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#f1f5f9;
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.register-card{
-  width:350px;
-  background:white;
-  padding:40px;
-  border-radius:10px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.1);
-  text-align:center;
+/* BACKGROUND (PROJECT THEME) */
+.register-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+        url("https://images.unsplash.com/photo-1523580494863-6f3031224c94")
+        no-repeat center/cover;
+
+    padding: 20px;
 }
 
-.register-card h2{
-  margin-bottom:25px;
-  color:#1e293b;
-}
-
-.register-card form{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-
-.register-card input{
-  padding:12px;
-  border:1px solid #cbd5e1;
-  border-radius:6px;
-  font-size:14px;
-}
-
-.register-card button{
-  padding:12px;
-  border:none;
-  border-radius:6px;
-  background:#2563eb;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.register-card button:hover{
-  background:#1d4ed8;
-}
-
-.login-link{
-  margin-top:15px;
-  font-size:14px;
-}
-
-.login-link a{
-  color:#2563eb;
-  text-decoration:none;
-}
-
-select {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+/* CARD */
+.register-card {
     width: 100%;
-    margin-bottom: 10px;
+    max-width: 420px;
+
+    padding: 35px 30px;
+    border-radius: 15px;
+
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
+
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+    text-align: center;
+    color: white;
+
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* TITLE */
+.register-card h2 {
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* INPUT + SELECT */
+.register-card input,
+.register-card select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+
+    border-radius: 8px;
+    border: none;
+
+    background: rgba(255,255,255,0.2);
+    color: white;
+
+    font-size: 14px;
+    outline: none;
+}
+
+/* SELECT OPTION FIX */
+.register-card select option {
+    color: black;
+}
+
+/* PLACEHOLDER */
+.register-card input::placeholder {
+    color: #ddd;
+}
+
+/* FOCUS EFFECT */
+.register-card input:focus,
+.register-card select:focus {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+}
+
+/* BUTTON */
+.register-card button {
+    width: 100%;
+    padding: 12px;
+
+    background: #ffffff;
+    color: #111827;
+
+    border: none;
+    border-radius: 8px;
+
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.register-card button:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
+
+/* LOGIN LINK */
+.login-link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #fff;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ======================= */
+/* 📱 RESPONSIVE DESIGN */
+/* ======================= */
+
+@media (max-width: 480px) {
+
+    .register-card {
+        padding: 25px 20px;
+    }
+
+    .register-card h2 {
+        font-size: 20px;
+    }
+
+    .register-card input,
+    .register-card select {
+        padding: 10px;
+    }
+
+    .register-card button {
+        padding: 10px;
+    }
 }

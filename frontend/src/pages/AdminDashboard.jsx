@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
 import "../styles/admin.css";
 import * as XLSX from "xlsx";
 
@@ -24,6 +23,10 @@ export default function AdminDashboard() {
 
     const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
+    useEffect(() => {
+        fetchCertificates();
+    }, []);
+
     const fetchCertificates = async () => {
         try {
             const res = await fetch(API);
@@ -34,10 +37,6 @@ export default function AdminDashboard() {
         }
     };
 
-    useEffect(() => {
-        fetchCertificates();
-    }, []);
-
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -45,13 +44,11 @@ export default function AdminDashboard() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const res = await fetch(API, {
+        await fetch(API, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(form)
         });
-
-        await res.json();
 
         setMessage("Certificate added successfully");
         fetchCertificates();
@@ -131,9 +128,25 @@ export default function AdminDashboard() {
         cert.certificateId.toLowerCase().includes(search.toLowerCase())
     );
 
+    // ✅ NEW NAVBAR COMPONENT
+    const AdminNavbar = () => {
+        return (
+            <div className="admin-navbar">
+                <div className="logo">🎓 Admin Panel</div>
+
+                <div className="nav-links">
+                    <button onClick={fetchCertificates}>Dashboard</button>
+                    <button onClick={exportExcel}>Export</button>
+                    <button onClick={resetForm}>Clear</button>
+                    <button className="logout">Logout</button>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <>
-            <Navbar />
+            <AdminNavbar />
 
             <div className="admin-container">
 
@@ -141,28 +154,10 @@ export default function AdminDashboard() {
 
                 <h2>🛠 Admin Dashboard</h2>
 
-                <div className="system-info">
-                    <h3>📌 Certificate Verification System</h3>
-                    <p>
-                        Manage and verify digital certificates. Each certificate contains a unique ID used for validation.
-                    </p>
-                </div>
-
-                <div className="stats">
-                    <div className="card">📄 Total: {certificates.length}</div>
-                    <div className="card">📚 Courses: {new Set(certificates.map(c => c.course)).size}</div>
-                    <div className="card">👤 Users: {new Set(certificates.map(c => c.email)).size}</div>
-                    <div className="card">🆕 Latest: {certificates[certificates.length - 1]?.certificateId || "N/A"}</div>
-                </div>
-
                 <div className="admin-actions">
                     <button onClick={exportExcel}>📥 Export</button>
                     <button onClick={fetchCertificates}>🔄 Refresh</button>
                     <button onClick={resetForm}>🧹 Clear</button>
-                </div>
-
-                <div className="info-box">
-                    ✅ Each certificate ID is unique and can be verified by users.
                 </div>
 
                 <form className="admin-form" onSubmit={handleSubmit}>
@@ -197,17 +192,11 @@ export default function AdminDashboard() {
                     )}
                 </form>
 
-                <div className="actions-bar">
-                    <input
-                        className="search-input"
-                        placeholder="Search by Name or ID"
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-
-                    <button className="export-btn" onClick={exportExcel}>
-                        📥 Export Excel
-                    </button>
-                </div>
+                <input
+                    className="search-input"
+                    placeholder="Search by Name or ID"
+                    onChange={(e) => setSearch(e.target.value)}
+                />
 
                 <table>
                     <thead>
@@ -231,7 +220,9 @@ export default function AdminDashboard() {
                                 <td>
                                     {cert.completionDate
                                         ? new Date(cert.completionDate).toLocaleDateString()
-                                        : "N/A"}
+                                        : cert.issueDate
+                                            ? new Date(cert.issueDate).toLocaleDateString()
+                                            : "N/A"}
                                 </td>
                                 <td>
                                     <button onClick={() => handleDeleteClick(cert.certificateId)}>❌</button>
@@ -241,35 +232,6 @@ export default function AdminDashboard() {
                         ))}
                     </tbody>
                 </table>
-
-                <div className="recent-activity">
-                    <h3>🕒 Recent Certificates</h3>
-                    <ul>
-                        {certificates.slice(-5).reverse().map(cert => (
-                            <li key={cert.certificateId}>
-                                {cert.name} - {cert.course}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="footer">
-                    © 2026 Certificate Verification System
-                </div>
-
-                {showConfirm && (
-                    <div className="modal-overlay">
-                        <div className="modal-box">
-                            <h3>⚠️ Confirm Delete</h3>
-                            <p>Are you sure you want to delete this certificate?</p>
-
-                            <div className="modal-buttons">
-                                <button className="cancel" onClick={cancelDelete}>Cancel</button>
-                                <button className="delete" onClick={confirmDelete}>Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
 
             </div>
         </>
