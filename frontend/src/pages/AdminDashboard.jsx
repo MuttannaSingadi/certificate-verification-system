@@ -9,7 +9,8 @@ export default function AdminDashboard() {
         name: "",
         email: "",
         course: "",
-        certificateId: ""
+        certificateId: "",
+        completionDate: ""
     });
 
     const [certificates, setCertificates] = useState([]);
@@ -82,7 +83,12 @@ export default function AdminDashboard() {
     };
 
     const handleEdit = (cert) => {
-        setForm(cert);
+        setForm({
+            ...cert,
+            completionDate: cert.completionDate
+                ? cert.completionDate.split("T")[0]
+                : ""
+        });
         setOriginalId(cert.certificateId);
         setIsEditing(true);
     };
@@ -102,7 +108,13 @@ export default function AdminDashboard() {
     };
 
     const resetForm = () => {
-        setForm({ name: "", email: "", course: "", certificateId: "" });
+        setForm({
+            name: "",
+            email: "",
+            course: "",
+            certificateId: "",
+            completionDate: ""
+        });
         setOriginalId(null);
         setIsEditing(false);
     };
@@ -167,6 +179,14 @@ export default function AdminDashboard() {
                         required
                     />
 
+                    <input
+                        type="date"
+                        name="completionDate"
+                        value={form.completionDate}
+                        onChange={handleChange}
+                        required
+                    />
+
                     {!isEditing ? (
                         <button type="submit">➕ Add</button>
                     ) : (
@@ -196,6 +216,7 @@ export default function AdminDashboard() {
                             <th>Email</th>
                             <th>Course</th>
                             <th>ID</th>
+                            <th>Date</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -207,6 +228,11 @@ export default function AdminDashboard() {
                                 <td>{cert.email}</td>
                                 <td>{cert.course}</td>
                                 <td>{cert.certificateId}</td>
+                                <td>
+                                    {cert.completionDate
+                                        ? new Date(cert.completionDate).toLocaleDateString()
+                                        : "N/A"}
+                                </td>
                                 <td>
                                     <button onClick={() => handleDeleteClick(cert.certificateId)}>❌</button>
                                     <button onClick={() => handleEdit(cert)}>✏️</button>

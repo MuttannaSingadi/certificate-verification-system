@@ -27,6 +27,17 @@ export default function CertificateCard({ data }) {
 
                 <h3 className="cert-course">{data.course}</h3>
 
+                <p className="cert-date">
+                    Completion Date:{" "}
+                    <b>
+                        {new Date(data.completionDate).toLocaleDateString("en-IN", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric"
+                        })}
+                    </b>
+                </p>
+
                 <p className="cert-id">
                     Certificate ID: <b>{data.certificateId}</b>
                 </p>

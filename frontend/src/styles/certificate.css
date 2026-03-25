@@ -182,6 +182,12 @@
     box-shadow: 0 8px 20px rgba(45,91,227,0.4);
 }
 
+.cert-date {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
 /* ===== RESPONSIVE ===== */
 
 /* Tablet */
