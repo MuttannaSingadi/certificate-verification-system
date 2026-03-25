@@ -16,20 +16,49 @@ function App() {
     <BrowserRouter>
       <Routes>
 
+        {/* ✅ PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/uploadstudents" element={<UploadStudents />} />
         <Route path="/searchcertificate" element={<SearchCertificate />} />
         <Route path="/certificate" element={<CertificateDetails />} />
-        <Route path="/generatecertificate" element={<GenerateCertificate />} />
-        <Route path="/admindashboard" element={<AdminDashboard />} />
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } />
+
+        {/* 🔒 PROTECTED ROUTES */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/uploadstudents"
+          element={
+            <ProtectedRoute>
+              <UploadStudents />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/generatecertificate"
+          element={
+            <ProtectedRoute>
+              <GenerateCertificate />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admindashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     </BrowserRouter>

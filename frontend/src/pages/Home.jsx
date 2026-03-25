@@ -9,14 +9,21 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleVerify = () => {
-    if (!certificateId.trim()) {
-      alert("Enter certificate ID");
-      return;
-    }
+  const token = localStorage.getItem("token");
 
-    // ✅ pass data using state
-    navigate("/searchCertificate", { state: { certificateId } });
-  };
+  if (!token) {
+    alert("⚠️ Please login first");
+    navigate("/login");
+    return;
+  }
+
+  if (!certificateId.trim()) {
+    alert("Enter certificate ID");
+    return;
+  }
+
+  navigate("/searchcertificate", { state: { certificateId } });
+};
 
   return (
     <>

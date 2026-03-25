@@ -18,7 +18,7 @@ export default function Dashboard() {
       setError("");
       setResult(null);
 
-      if (!certificateId) {
+      if (!certificateId.trim()) {
         setError("⚠️ Please enter Certificate ID");
         return;
       }
@@ -43,6 +43,14 @@ export default function Dashboard() {
     navigate("/certificate", { state: result });
   };
 
+  // 🔒 LOGOUT FUNCTION (FIXED)
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/", { replace: true });
+  };
+
   // ✅ NAVBAR
   const Navbar = () => (
     <div className="dashboard-navbar">
@@ -50,13 +58,19 @@ export default function Dashboard() {
 
       <div className="nav-links">
         <button onClick={() => navigate("/")}>Home</button>
+
         <button onClick={() => {
           setResult(null);
           setCertificateId("");
+          setError("");
         }}>
           Clear
         </button>
-        <button className="logout">Logout</button>
+
+        {/* ✅ FIXED LOGOUT */}
+        <button className="logout" onClick={handleLogout}>
+          Logout
+        </button>
       </div>
     </div>
   );

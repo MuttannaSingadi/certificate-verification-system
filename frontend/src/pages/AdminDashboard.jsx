@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ added
 import "../styles/admin.css";
 import * as XLSX from "xlsx";
 
 export default function AdminDashboard() {
+
+    const navigate = useNavigate(); // ✅ added
 
     const [form, setForm] = useState({
         name: "",
@@ -50,7 +53,7 @@ export default function AdminDashboard() {
             body: JSON.stringify(form)
         });
 
-        setMessage("Certificate added successfully");
+        setMessage("✅ Certificate added successfully");
         fetchCertificates();
         resetForm();
 
@@ -65,7 +68,7 @@ export default function AdminDashboard() {
     const confirmDelete = async () => {
         await fetch(`${API}/${deleteId}`, { method: "DELETE" });
 
-        setMessage("Certificate deleted successfully");
+        setMessage("❌ Certificate deleted successfully");
 
         setShowConfirm(false);
         setDeleteId(null);
@@ -97,7 +100,7 @@ export default function AdminDashboard() {
             body: JSON.stringify(form)
         });
 
-        setMessage("Certificate updated successfully");
+        setMessage("✏️ Certificate updated successfully");
         fetchCertificates();
         resetForm();
 
@@ -128,7 +131,15 @@ export default function AdminDashboard() {
         cert.certificateId.toLowerCase().includes(search.toLowerCase())
     );
 
-    // ✅ NEW NAVBAR COMPONENT
+    // ✅ LOGOUT FUNCTION
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/", { replace: true });
+    };
+
+    // ✅ NAVBAR
     const AdminNavbar = () => {
         return (
             <div className="admin-navbar">
@@ -138,7 +149,9 @@ export default function AdminDashboard() {
                     <button onClick={fetchCertificates}>Dashboard</button>
                     <button onClick={exportExcel}>Export</button>
                     <button onClick={resetForm}>Clear</button>
-                    <button className="logout">Logout</button>
+                    <button className="logout" onClick={handleLogout}>
+                        Logout
+                    </button>
                 </div>
             </div>
         );
@@ -150,7 +163,7 @@ export default function AdminDashboard() {
 
             <div className="admin-container">
 
-                {message && <div className="success-msg">✅ {message}</div>}
+                {message && <div className="success-msg">{message}</div>}
 
                 <h2>🛠 Admin Dashboard</h2>
 
@@ -232,6 +245,19 @@ export default function AdminDashboard() {
                         ))}
                     </tbody>
                 </table>
+
+                {/* DELETE MODAL */}
+                {showConfirm && (
+                    <div className="modal-overlay">
+                        <div className="modal-box">
+                            <h3>⚠️ Confirm Delete</h3>
+                            <p>Are you sure you want to delete?</p>
+
+                            <button onClick={confirmDelete}>Yes</button>
+                            <button onClick={cancelDelete}>No</button>
+                        </div>
+                    </div>
+                )}
 
             </div>
         </>
