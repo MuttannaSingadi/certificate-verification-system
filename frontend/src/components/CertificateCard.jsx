@@ -3,14 +3,28 @@ import { QRCodeCanvas } from "qrcode.react";
 
 export default function CertificateCard({ data }) {
 
-    if (!data) return null; // safety check
+    if (!data) return null;
+
+    const formattedDate =
+        data.completionDate
+            ? new Date(data.completionDate).toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric"
+              })
+            : data.issueDate
+            ? new Date(data.issueDate).toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric"
+              })
+            : "N/A";
 
     return (
         <div className="certificate-container">
 
             <div className="certificate-card">
 
-                {/* Top Logo */}
                 <div className="cert-header">
                     <div className="logo">
                         <img src="/logo_1.png" alt="logo" />
@@ -28,14 +42,7 @@ export default function CertificateCard({ data }) {
                 <h3 className="cert-course">{data.course}</h3>
 
                 <p className="cert-date">
-                    Completion Date:{" "}
-                    <b>
-                        {new Date(data.completionDate).toLocaleDateString("en-IN", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric"
-                        })}
-                    </b>
+                    Completion Date: <b>{formattedDate}</b>
                 </p>
 
                 <p className="cert-id">
@@ -44,7 +51,6 @@ export default function CertificateCard({ data }) {
 
                 <p className="cert-email">{data.email}</p>
 
-                {/* QR Code */}
                 <div className="qr-section">
                     <QRCodeCanvas
                         value={`https://certificate-verification-system-black.vercel.app/verify/${data.certificateId}`}
@@ -52,7 +58,6 @@ export default function CertificateCard({ data }) {
                     />
                 </div>
 
-                {/* Footer */}
                 <div className="cert-footer">
 
                     <div className="signature">
@@ -69,7 +74,6 @@ export default function CertificateCard({ data }) {
 
                 </div>
 
-                {/* Actions */}
                 <div className="actions">
                     <button onClick={() => window.print()}>
                         🖨️ Print
