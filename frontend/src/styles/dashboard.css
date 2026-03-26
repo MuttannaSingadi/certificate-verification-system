@@ -1,34 +1,14 @@
-/* NAVBAR */
-.dashboard-navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #111827;
-    color: white;
-    padding: 15px 25px;
-}
-
-.dashboard-navbar .nav-links {
-    display: flex;
-    gap: 10px;
-}
-
-.dashboard-navbar button {
-    background: #374151;
-    border: none;
-    padding: 8px 12px;
-    color: white;
-    border-radius: 6px;
-}
-
-.dashboard-navbar .logout {
-    background: #ef4444;
-}
-
-/* MAIN */
 .dashboard {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
     text-align: center;
-    padding: 40px 20px;
+}
+
+.dashboard h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #111827;
 }
 
 .dashboard-subtitle {
@@ -36,52 +16,175 @@
     margin-bottom: 25px;
 }
 
-/* SEARCH */
 .search-box {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .search-box input {
-    padding: 10px;
-    width: 250px;
-    border-radius: 6px;
+    padding: 12px;
+    width: 300px;
+    border-radius: 8px;
     border: 1px solid #ccc;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-box input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 5px rgba(79,70,229,0.3);
 }
 
 .search-box button {
-    padding: 10px 15px;
+    padding: 12px 18px;
     background: #4f46e5;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* RESULT CARD */
+.search-box button:hover {
+    background: #4338ca;
+}
+
+.error {
+    color: #dc2626;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
 .result-card {
     background: white;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    margin-inline: auto;
+    padding: 25px;
+    border-radius: 16px;
+    max-width: 450px;
+    margin: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: left;
+    animation: fadeIn 0.4s ease;
+}
 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+.result-card h3 {
+    color: #2563eb;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.result-card p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #374151;
+}
+
+.result-card strong {
+    color: #111827;
+}
+
+.result-card span {
+    font-weight: 600;
 }
 
 .download-btn {
-    margin-top: 15px;
-    background: #10b981;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: linear-gradient(90deg, #10b981, #059669);
     color: white;
-    padding: 10px;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s;
 }
 
-/* ERROR */
-.error {
-    color: red;
-    margin-top: 10px;
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(16,185,129,0.4);
+}
+
+.dashboard-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #111827, #1f2937);
+    color: white;
+    padding: 14px 20px;
+    flex-wrap: wrap;
+}
+
+.dashboard-navbar .logo {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-links button {
+    background: #374151;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-links button:hover {
+    background: #4b5563;
+}
+
+.logout {
+    background: #ef4444;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 15px;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+
+    .result-card {
+        width: 100%;
+    }
+
+    .dashboard-navbar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }

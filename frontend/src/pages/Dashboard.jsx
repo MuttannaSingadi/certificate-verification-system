@@ -12,7 +12,6 @@ export default function Dashboard() {
 
   const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
-  // 🔍 SEARCH CERTIFICATE
   const handleSearch = async () => {
     try {
       setError("");
@@ -37,21 +36,17 @@ export default function Dashboard() {
     }
   };
 
-  // ⬇️ DOWNLOAD → Navigate to certificate page
   const handleDownload = () => {
     if (!result) return;
     navigate("/certificate", { state: result });
   };
 
-  // 🔒 LOGOUT FUNCTION (FIXED)
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     navigate("/", { replace: true });
   };
 
-  // ✅ NAVBAR
   const Navbar = () => (
     <div className="dashboard-navbar">
       <div className="logo">🎓 User Dashboard</div>
@@ -67,7 +62,6 @@ export default function Dashboard() {
           Clear
         </button>
 
-        {/* ✅ FIXED LOGOUT */}
         <button className="logout" onClick={handleLogout}>
           Logout
         </button>
@@ -86,7 +80,6 @@ export default function Dashboard() {
           Search and verify your certificate instantly
         </p>
 
-        {/* 🔍 SEARCH BOX */}
         <div className="search-box">
           <input
             type="text"
@@ -97,10 +90,8 @@ export default function Dashboard() {
           <button onClick={handleSearch}>Search</button>
         </div>
 
-        {/* ❌ ERROR */}
         {error && <div className="error">{error}</div>}
 
-        {/* ✅ RESULT */}
         {result && (
           <div className="result-card">
             <h3>✅ Certificate Verified</h3>
@@ -118,6 +109,12 @@ export default function Dashboard() {
                   ? new Date(result.issueDate).toLocaleDateString()
                   : "No Date"}
             </p>
+
+            {/* 🔥 EXTRA INFO */}
+            <p><strong>Status:</strong> <span style={{ color: "green" }}>✔ Verified</span></p>
+            <p><strong>Issued By:</strong> SecureCert Authority</p>
+            <p><strong>Verified On:</strong> {new Date().toLocaleString()}</p>
+            <p><strong>Description:</strong> This certificate confirms successful completion of the course.</p>
 
             <button onClick={handleDownload} className="download-btn">
               ⬇️ Download Certificate
