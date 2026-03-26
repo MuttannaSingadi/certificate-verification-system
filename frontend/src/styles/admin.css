@@ -1,4 +1,3 @@
-/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -10,21 +9,17 @@ body {
     background: #f1f5f9;
 }
 
-/* NAVBAR */
 .admin-navbar {
     position: sticky;
     top: 0;
     z-index: 1000;
-
     width: 100%;
     background: linear-gradient(90deg, #111827, #1f2937);
     color: white;
     padding: 14px 20px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
@@ -56,20 +51,17 @@ body {
     background: #ef4444;
 }
 
-/* CONTAINER */
 .admin-container {
     max-width: 1200px;
     margin: 20px auto;
     padding: 15px;
 }
 
-/* TITLE */
 h2 {
     margin-bottom: 15px;
     color: #111827;
 }
 
-/* ACTION BUTTONS */
 .admin-actions {
     display: flex;
     flex-wrap: wrap;
@@ -91,17 +83,14 @@ h2 {
     background: #4338ca;
 }
 
-/* FORM CARD */
 .admin-form {
     background: white;
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 20px;
-
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 12px;
-
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
@@ -125,7 +114,6 @@ h2 {
     background: #059669;
 }
 
-/* SEARCH */
 .search-input {
     width: 100%;
     padding: 10px;
@@ -134,14 +122,12 @@ h2 {
     border: 1px solid #ccc;
 }
 
-/* TABLE CARD */
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
     border-radius: 12px;
     overflow: hidden;
-
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
@@ -164,7 +150,6 @@ tbody tr:hover {
     background: #f9fafb;
 }
 
-/* TABLE BUTTONS */
 td button {
     border: none;
     padding: 6px 10px;
@@ -183,7 +168,6 @@ td button:last-child {
     color: white;
 }
 
-/* SUCCESS MESSAGE */
 .success-msg {
     background: #d1fae5;
     color: #065f46;
@@ -192,12 +176,82 @@ td button:last-child {
     margin-bottom: 15px;
 }
 
-/* ========================= */
-/* 📱 RESPONSIVE DESIGN */
-/* ========================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-box {
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 14px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    animation: modalFade 0.3s ease;
+}
+
+.modal-box h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.modal-box p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.modal-box button {
+    margin: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.modal-box button:first-of-type {
+    background: #ef4444;
+    color: white;
+}
+
+.modal-box button:first-of-type:hover {
+    background: #dc2626;
+}
+
+.modal-box button:last-of-type {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.modal-box button:last-of-type:hover {
+    background: #d1d5db;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
 @media (max-width: 768px) {
-
     .admin-navbar {
         flex-direction: column;
         gap: 10px;

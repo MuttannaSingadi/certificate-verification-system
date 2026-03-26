@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ added
+import { useNavigate } from "react-router-dom";
 import "../styles/admin.css";
 import * as XLSX from "xlsx";
 
 export default function AdminDashboard() {
 
-    const navigate = useNavigate(); // ✅ added
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         name: "",
@@ -24,56 +24,69 @@ export default function AdminDashboard() {
     const [deleteId, setDeleteId] = useState(null);
     const [message, setMessage] = useState("");
 
+    // ✅ FILE STATE (NEW)
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
     useEffect(() => {
         fetchCertificates();
     }, []);
 
+    // ✅ FETCH
     const fetchCertificates = async () => {
         try {
             const res = await fetch(API);
             const data = await res.json();
             setCertificates(data);
-        } catch {
-            console.error("Error fetching data");
+        } catch (err) {
+            console.error("Error fetching data:", err);
         }
     };
 
+    // ✅ INPUT CHANGE
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    // ✅ ADD
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await fetch(API, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form)
-        });
+        try {
+            await fetch(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form)
+            });
 
-        setMessage("✅ Certificate added successfully");
-        fetchCertificates();
-        resetForm();
+            setMessage("✅ Certificate added successfully");
+            fetchCertificates();
+            resetForm();
+        } catch {
+            setMessage("❌ Error adding certificate");
+        }
 
         setTimeout(() => setMessage(""), 2000);
     };
 
+    // ✅ DELETE
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setShowConfirm(true);
     };
 
     const confirmDelete = async () => {
-        await fetch(`${API}/${deleteId}`, { method: "DELETE" });
-
-        setMessage("❌ Certificate deleted successfully");
+        try {
+            await fetch(`${API}/${deleteId}`, { method: "DELETE" });
+            setMessage("❌ Certificate deleted successfully");
+            fetchCertificates();
+        } catch {
+            setMessage("❌ Error deleting certificate");
+        }
 
         setShowConfirm(false);
         setDeleteId(null);
-        fetchCertificates();
-
         setTimeout(() => setMessage(""), 2000);
     };
 
@@ -82,6 +95,7 @@ export default function AdminDashboard() {
         setDeleteId(null);
     };
 
+    // ✅ EDIT
     const handleEdit = (cert) => {
         setForm({
             ...cert,
@@ -93,20 +107,26 @@ export default function AdminDashboard() {
         setIsEditing(true);
     };
 
+    // ✅ UPDATE
     const handleUpdate = async () => {
-        await fetch(`${API}/${originalId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form)
-        });
+        try {
+            await fetch(`${API}/${originalId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form)
+            });
 
-        setMessage("✏️ Certificate updated successfully");
-        fetchCertificates();
-        resetForm();
+            setMessage("✏️ Certificate updated successfully");
+            fetchCertificates();
+            resetForm();
+        } catch {
+            setMessage("❌ Error updating certificate");
+        }
 
         setTimeout(() => setMessage(""), 2000);
     };
 
+    // ✅ RESET
     const resetForm = () => {
         setForm({
             name: "",
@@ -119,43 +139,111 @@ export default function AdminDashboard() {
         setIsEditing(false);
     };
 
+    // ✅ EXPORT EXCEL
     const exportExcel = () => {
-        const ws = XLSX.utils.json_to_sheet(certificates);
+        const formattedData = certificates.map(cert => ({
+            Name: cert.name,
+            Email: cert.email,
+            Course: cert.course,
+            "Certificate ID": cert.certificateId,
+            "Completion Date": cert.completionDate
+                ? new Date(cert.completionDate).toLocaleDateString()
+                : "N/A"
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(formattedData);
+
+        ws["!cols"] = [
+            { wch: 20 },
+            { wch: 25 },
+            { wch: 20 },
+            { wch: 20 },
+            { wch: 18 }
+        ];
+
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Certificates");
-        XLSX.writeFile(wb, "certificates.xlsx");
+
+        XLSX.writeFile(wb, `Certificates_${new Date().toISOString().slice(0,10)}.xlsx`);
     };
 
+    // ✅ IMPORT EXCEL (WITH BUTTON 🔥)
+    const handleFileUpload = async () => {
+
+        if (!selectedFile) {
+            setMessage("⚠️ Please select a file first");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = async (evt) => {
+            const data = new Uint8Array(evt.target.result);
+            const workbook = XLSX.read(data, { type: "array" });
+
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+
+            const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+            try {
+                for (let row of jsonData) {
+                    const formatted = {
+                        name: row.Name || "",
+                        email: row.Email || "",
+                        course: row.Course || "",
+                        certificateId: row["Certificate ID"] || "",
+                        completionDate: row["Completion Date"] || ""
+                    };
+
+                    await fetch(API, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(formatted)
+                    });
+                }
+
+                setMessage("✅ Excel uploaded successfully");
+                fetchCertificates();
+
+            } catch (err) {
+                console.error(err);
+                setMessage("❌ Upload failed");
+            }
+
+            setTimeout(() => setMessage(""), 3000);
+        };
+
+        reader.readAsArrayBuffer(selectedFile);
+    };
+
+    // ✅ SEARCH
     const filtered = certificates.filter(cert =>
         cert.name.toLowerCase().includes(search.toLowerCase()) ||
         cert.certificateId.toLowerCase().includes(search.toLowerCase())
     );
 
-    // ✅ LOGOUT FUNCTION
+    // ✅ LOGOUT
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-
+        localStorage.clear();
         navigate("/", { replace: true });
     };
 
     // ✅ NAVBAR
-    const AdminNavbar = () => {
-        return (
-            <div className="admin-navbar">
-                <div className="logo">🎓 Admin Panel</div>
+    const AdminNavbar = () => (
+        <div className="admin-navbar">
+            <div className="logo">🎓 Admin Panel</div>
 
-                <div className="nav-links">
-                    <button onClick={fetchCertificates}>Dashboard</button>
-                    <button onClick={exportExcel}>Export</button>
-                    <button onClick={resetForm}>Clear</button>
-                    <button className="logout" onClick={handleLogout}>
-                        Logout
-                    </button>
-                </div>
+            <div className="nav-links">
+                <button onClick={fetchCertificates}>Dashboard</button>
+                <button onClick={exportExcel}>Export</button>
+                <button onClick={resetForm}>Clear</button>
+                <button className="logout" onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
-        );
-    };
+        </div>
+    );
 
     return (
         <>
@@ -167,7 +255,19 @@ export default function AdminDashboard() {
 
                 <h2>🛠 Admin Dashboard</h2>
 
+                              
+
                 <div className="admin-actions">
+                    <div className="upload-section">
+                    <input
+                        type="file"
+                        accept=".xlsx, .xls"
+                        onChange={(e) => setSelectedFile(e.target.files[0])}
+                    />
+                    <button onClick={handleFileUpload}>
+                        📤 Upload Excel
+                    </button>
+                </div>
                     <button onClick={exportExcel}>📥 Export</button>
                     <button onClick={fetchCertificates}>🔄 Refresh</button>
                     <button onClick={resetForm}>🧹 Clear</button>
@@ -230,7 +330,7 @@ export default function AdminDashboard() {
                                 <td>{cert.email}</td>
                                 <td>{cert.course}</td>
                                 <td>{cert.certificateId}</td>
-                                <td>
+                                 <td>
                                     {cert.completionDate
                                         ? new Date(cert.completionDate).toLocaleDateString()
                                         : cert.issueDate
@@ -246,13 +346,10 @@ export default function AdminDashboard() {
                     </tbody>
                 </table>
 
-                {/* DELETE MODAL */}
                 {showConfirm && (
                     <div className="modal-overlay">
                         <div className="modal-box">
                             <h3>⚠️ Confirm Delete</h3>
-                            <p>Are you sure you want to delete?</p>
-
                             <button onClick={confirmDelete}>Yes</button>
                             <button onClick={cancelDelete}>No</button>
                         </div>
