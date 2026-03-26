@@ -13,7 +13,6 @@ export default function SearchCertificate() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // ✅ AUTO LOAD FROM HOME PAGE
     useEffect(() => {
         if (location.state?.certificateId) {
             const id = location.state.certificateId;
@@ -22,13 +21,12 @@ export default function SearchCertificate() {
         }
     }, [location.state]);
 
-    // ✅ SEARCH FUNCTION
     const handleSearch = async (idParam) => {
 
         const id = idParam || certificateId;
 
         if (!id) {
-            setError("⚠️ Please enter Certificate ID");
+            setError("⚠️ Please enter a valid Certificate ID");
             return;
         }
 
@@ -42,22 +40,17 @@ export default function SearchCertificate() {
             );
 
             if (!res.ok) {
-                setError("❌ Certificate not found");
+                setError("❌ Certificate not found. Please check the ID.");
                 setLoading(false);
                 return;
             }
 
             const data = await res.json();
-
-            // ✅ OPTION 1: show here
             setResult(data);
-
-            // ✅ OPTION 2 (BETTER UX): go to certificate page
-            // navigate("/certificate", { state: data });
 
         } catch (error) {
             console.log(error);
-            setError("⚠️ Error fetching certificate");
+            setError("⚠️ Server error. Please try again later.");
         }
 
         setLoading(false);
@@ -69,14 +62,13 @@ export default function SearchCertificate() {
 
             <div className="search-container">
 
-                <h2>🎓 Verify Certificate</h2>
+                <h2>🎓 Certificate Verification Portal</h2>
 
                 <p className="subtitle">
-                    Enter your certificate ID to check authenticity instantly.
+                    Verify the authenticity of your certificate instantly using a unique ID.
                 </p>
 
                 <div className="search-box">
-
                     <input
                         type="text"
                         placeholder="Enter Certificate ID (e.g., CERT12345)"
@@ -85,25 +77,34 @@ export default function SearchCertificate() {
                     />
 
                     <button onClick={() => handleSearch()}>
-                        🔍 Verify
+                        🔍 Verify Now
                     </button>
-
                 </div>
 
-                {loading && <p className="loading">⏳ Verifying...</p>}
+                {loading && <p className="loading">⏳ Verifying certificate, please wait...</p>}
                 {error && <p className="error">{error}</p>}
+
+                {!loading && !result && !error && (
+                    <p className="info-text">
+                        💡 Tip: Enter the exact certificate ID provided to you.
+                    </p>
+                )}
 
                 {result && (
                     <div className="result-card">
 
-                        <h3>✅ Certificate Verified</h3>
+                        <h3>✅ Certificate Verified Successfully</h3>
 
                         <p><b>👤 Name:</b> {result.name}</p>
                         <p><b>📧 Email:</b> {result.email}</p>
                         <p><b>📘 Course:</b> {result.course}</p>
                         <p><b>🆔 Certificate ID:</b> {result.certificateId}</p>
 
-                        {/* 🔥 EXTRA BUTTON */}
+                        {/* 🔥 NEW DETAILS (if available in backend) */}
+                        <p><b>🏫 Issued By:</b> {result.issuer || "Verified Authority"}</p>
+                        <p><b>📅 Issue Date:</b> {result.issueDate || "Not Available"}</p>
+                        <p><b>✔ Status:</b> Valid & Authentic</p>
+
                         <button 
                             className="view-btn"
                             onClick={() => navigate("/certificate", { state: result })}
@@ -114,10 +115,21 @@ export default function SearchCertificate() {
                     </div>
                 )}
 
+                {/* 🔐 SECURITY INFO */}
                 <div className="info-box">
+                    <h4>🔐 Security Assurance</h4>
                     <p>
-                        🔐 This system ensures that all certificates are genuine
-                        and issued by authorized institutions.
+                        This system ensures certificates are verified against official records.
+                        Any mismatch indicates a potentially invalid certificate.
+                    </p>
+                </div>
+
+                {/* 📌 HELP SECTION */}
+                <div className="help-box">
+                    <h4>❓ Need Help?</h4>
+                    <p>
+                        If you are unable to verify your certificate, please contact support
+                        or check if the certificate ID is entered correctly.
                     </p>
                 </div>
 

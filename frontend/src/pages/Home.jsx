@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { toast } from "react-toastify";
+
 import "../styles/home.css";
 
 export default function Home() {
@@ -9,21 +11,21 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleVerify = () => {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  if (!token) {
-    alert("⚠️ Please login first");
-    navigate("/login");
-    return;
-  }
+    if (!token) {
+      toast.warning("Please login to continue 🔐");
+      navigate("/login");
+      return;
+    }
+    
+    if (!certificateId.trim()) {
+      toast.error("Please enter a certificate ID");
+      return;
+    }
 
-  if (!certificateId.trim()) {
-    alert("Enter certificate ID");
-    return;
-  }
-
-  navigate("/searchcertificate", { state: { certificateId } });
-};
+    navigate("/searchcertificate", { state: { certificateId } });
+  };
 
   return (
     <>
