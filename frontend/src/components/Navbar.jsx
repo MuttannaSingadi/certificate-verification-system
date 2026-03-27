@@ -51,9 +51,9 @@ export default function Navbar() {
         </li>
 
         <li>
-          <button className="nav-btn" onClick={handleVerifyClick}>
+          <Link onClick={handleVerifyClick}>
             Verify
-          </button>
+          </Link>
         </li>
 
         {user?.role === "admin" && (
@@ -72,9 +72,9 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
-              <button className="nav-btn logout" onClick={handleLogout}>
+              <Link onClick={handleLogout}>
                 Logout
-              </button>
+              </Link>
             </li>
           </>
         ) : (
