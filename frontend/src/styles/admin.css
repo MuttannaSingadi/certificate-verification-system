@@ -9,6 +9,7 @@ body {
     background: #f1f5f9;
 }
 
+/* NAVBAR */
 .admin-navbar {
     position: sticky;
     top: 0;
@@ -40,7 +41,6 @@ body {
     border-radius: 6px;
     color: white;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 .admin-navbar button:hover {
@@ -51,6 +51,7 @@ body {
     background: #ef4444;
 }
 
+/* CONTAINER */
 .admin-container {
     max-width: 1200px;
     margin: 20px auto;
@@ -62,6 +63,7 @@ h2 {
     color: #111827;
 }
 
+/* ACTION BUTTONS */
 .admin-actions {
     display: flex;
     flex-wrap: wrap;
@@ -76,13 +78,13 @@ h2 {
     padding: 8px 14px;
     border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 .admin-actions button:hover {
     background: #4338ca;
 }
 
+/* FORM */
 .admin-form {
     background: white;
     padding: 20px;
@@ -114,6 +116,7 @@ h2 {
     background: #059669;
 }
 
+/* SEARCH */
 .search-input {
     width: 100%;
     padding: 10px;
@@ -122,6 +125,7 @@ h2 {
     border: 1px solid #ccc;
 }
 
+/* TABLE */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -131,14 +135,22 @@ table {
     box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
+/* HEADER */
 thead {
     background: #4f46e5;
     color: white;
 }
 
-th, td {
+th {
     padding: 12px;
     text-align: left;
+}
+
+/* BODY */
+td {
+    padding: 12px;
+    color: #111827; /* ✅ FIXED TEXT */
+    font-weight: 500;
 }
 
 tbody tr {
@@ -150,6 +162,7 @@ tbody tr:hover {
     background: #f9fafb;
 }
 
+/* BUTTONS */
 td button {
     border: none;
     padding: 6px 10px;
@@ -168,6 +181,7 @@ td button:last-child {
     color: white;
 }
 
+/* SUCCESS */
 .success-msg {
     background: #d1fae5;
     color: #065f46;
@@ -176,6 +190,7 @@ td button:last-child {
     margin-bottom: 15px;
 }
 
+/* MODAL */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -197,7 +212,6 @@ td button:last-child {
     width: 320px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    animation: modalFade 0.3s ease;
 }
 
 .modal-box h3 {
@@ -218,8 +232,6 @@ td button:last-child {
     border-radius: 6px;
     border: none;
     cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
 }
 
 .modal-box button:first-of-type {
@@ -227,31 +239,17 @@ td button:last-child {
     color: white;
 }
 
-.modal-box button:first-of-type:hover {
-    background: #dc2626;
-}
-
 .modal-box button:last-of-type {
     background: #e5e7eb;
     color: #111827;
 }
 
-.modal-box button:last-of-type:hover {
-    background: #d1d5db;
-}
-
-@keyframes modalFade {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+/* ======================= */
+/* 📱 MOBILE FIX */
+/* ======================= */
 
 @media (max-width: 768px) {
+
     .admin-navbar {
         flex-direction: column;
         gap: 10px;
@@ -275,37 +273,14 @@ td button:last-child {
         grid-column: span 1;
     }
 
-    table, thead, tbody, th, td, tr {
+    /* ✅ FIXED TABLE (SCROLL INSTEAD OF BREAK) */
+    table {
         display: block;
+        overflow-x: auto;
+        white-space: nowrap;
     }
 
-    thead {
-        display: none;
+    th, td {
+        white-space: nowrap;
     }
-
-    tr {
-        background: white;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        padding: 10px;
-    }
-
-    td {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 10px;
-        border-bottom: 1px solid #eee;
-    }
-
-    td::before {
-        font-weight: bold;
-        color: #555;
-    }
-
-    td:nth-child(1)::before { content: "Name"; }
-    td:nth-child(2)::before { content: "Email"; }
-    td:nth-child(3)::before { content: "Course"; }
-    td:nth-child(4)::before { content: "ID"; }
-    td:nth-child(5)::before { content: "Date"; }
-    td:nth-child(6)::before { content: "Actions"; }
 }
