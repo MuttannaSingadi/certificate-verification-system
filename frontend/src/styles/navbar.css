@@ -1,3 +1,10 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* NAVBAR */
 .navbar {
   width: 100%;
@@ -5,11 +12,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 50px;
+
   background: linear-gradient(135deg, #e3e5eb, #576586);
   color: white;
+
   position: sticky;
   top: 0;
   z-index: 1000;
+
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
@@ -33,13 +43,12 @@
   font-size: 15px;
   font-weight: 500;
   position: relative;
-  transition: 0.3s;
   cursor: pointer;
   background: none;
   border: none;
 }
 
-/* UNDERLINE HOVER */
+/* HOVER EFFECT */
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -60,6 +69,7 @@
   color: #facc15;
 }
 
+/* LOGOUT COLOR */
 .logout {
   color: #f87171;
 }
@@ -72,7 +82,7 @@
 }
 
 /* ========================= */
-/* 📱 MOBILE RESPONSIVE */
+/* 📱 MOBILE */
 /* ========================= */
 
 @media (max-width: 768px) {
@@ -91,7 +101,8 @@
     right: 0;
     width: 220px;
 
-    background: white;
+    background: linear-gradient(135deg, #e3e5eb, #576586);
+
     flex-direction: column;
     align-items: center;
     gap: 15px;
