@@ -1,20 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "../styles/navbar.css";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     toast.success("Logged out successfully 👋");
     navigate("/login", { replace: true });
+    setMenuOpen(false);
   };
 
   const handleVerifyClick = () => {
@@ -27,50 +27,73 @@ export default function Navbar() {
     }
 
     navigate("/SearchCCertificate");
+    setMenuOpen(false);
   };
 
   return (
     <nav className="navbar">
+
       <div className="logo">
         <img src="/logo_1.png" alt="logo" />
       </div>
 
       <div
         className="menu-icon"
-        onClick={() => setMenuOpen(!menuOpen)}
+        onClick={() => setMenuOpen(prev => !prev)}
       >
-        ☰
+        {menuOpen ? "✖" : "☰"}
       </div>
 
-      <ul className={menuOpen ? "nav-links active" : "nav-links"}>
-        <li><Link to="/">Home</Link></li>
+      <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
 
         <li>
-          <Link className="nav-btn" onClick={handleVerifyClick}>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+        </li>
+
+        <li>
+          <button className="nav-btn" onClick={handleVerifyClick}>
             Verify
-          </Link>
+          </button>
         </li>
 
         {user?.role === "admin" && (
-          <li><Link to="/admindashboard">Admin</Link></li>
+          <li>
+            <Link to="/admindashboard" onClick={() => setMenuOpen(false)}>
+              Admin
+            </Link>
+          </li>
         )}
 
         {user ? (
           <>
-            <li><Link to="/dashboard">Dashboard</Link></li>
             <li>
-              <Link className="nav-btn logout" onClick={handleLogout}>
-                Logout
+              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
+                Dashboard
               </Link>
+            </li>
+            <li>
+              <button className="nav-btn logout" onClick={handleLogout}>
+                Logout
+              </button>
             </li>
           </>
         ) : (
           <>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/register">Register</Link></li>
+            <li>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link to="/register" onClick={() => setMenuOpen(false)}>
+                Register
+              </Link>
+            </li>
           </>
         )}
+
       </ul>
+
     </nav>
   );
 }

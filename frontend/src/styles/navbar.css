@@ -5,14 +5,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 50px;
-
   background: linear-gradient(135deg, #e3e5eb, #576586);
   color: white;
-
   position: sticky;
   top: 0;
   z-index: 1000;
-
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
@@ -29,16 +26,20 @@
   list-style: none;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-btn {
   text-decoration: none;
   color: white;
   font-size: 15px;
   font-weight: 500;
   position: relative;
   transition: 0.3s;
+  cursor: pointer;
+  background: none;
+  border: none;
 }
 
-/* UNDERLINE HOVER EFFECT */
+/* UNDERLINE HOVER */
 .nav-links a::after {
   content: "";
   position: absolute;
@@ -54,24 +55,13 @@
   width: 100%;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-btn:hover {
   color: #facc15;
 }
 
-/* BUTTON STYLE (LOGIN / LOGOUT) */
-.nav-links button {
-  background: #facc15;
-  color: #1e3a8a;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.3s;
-}
-
-.nav-links button:hover {
-  background: #fde047;
+.logout {
+  color: #f87171;
 }
 
 /* HAMBURGER */
@@ -111,20 +101,25 @@
     border-radius: 0 0 10px 10px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 
-    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+
+    transition: all 0.3s ease;
   }
 
   .nav-links.active {
-    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
-  .nav-links a {
+  .nav-links a,
+  .nav-btn {
     color: #1e293b;
   }
 
-  .nav-links button {
-    background: #2563eb;
-    color: white;
+  .logout {
+    color: #ef4444;
   }
-
 }
