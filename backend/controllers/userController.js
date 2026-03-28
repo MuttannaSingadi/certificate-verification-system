@@ -1,10 +1,15 @@
 const User = require("../models/User");
 
+// ✅ Get all users (without password)
 exports.getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find().select("-password");
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching users" });
-  }
+    try {
+        const users = await User.find().select("-password");
+
+        // ✅ Always return array
+        res.status(200).json(users || []);
+
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json([]);
+    }
 };
