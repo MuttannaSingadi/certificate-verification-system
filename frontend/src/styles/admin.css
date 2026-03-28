@@ -243,23 +243,66 @@ td button:last-child {
     background: #e5e7eb;
     color: #111827;
 }
-
 /* ======================= */
-/* 📱 MOBILE FIX */
+/* 📱 MOBILE FIX (FINAL) */
 /* ======================= */
 
 @media (max-width: 768px) {
 
+    /* ✅ FIX NAVBAR (IMPORTANT) */
     .admin-navbar {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
+        position: relative;
+        display: flex;
+        flex-direction: row; /* ✅ keep row */
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .admin-navbar .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
+    /* ✅ MENU ICON */
+    .admin-menu-icon {
+        display: block;
+        color: white;
+        font-size: 26px;
+        cursor: pointer;
     }
+
+    /* ✅ DROPDOWN MENU */
+    .admin-navbar .nav-links {
+        position: absolute;
+        top: 65px;
+        right: 15px;
+        width: 220px;
+
+        background: #1f2937;
+        border-radius: 12px;
+        padding: 12px;
+
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+
+        z-index: 1000;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .admin-navbar .nav-links.active {
+        display: flex;
+    }
+
+    /* ✅ BUTTON STYLE */
+    .admin-navbar .nav-links button {
+        width: 100%;
+        text-align: left;
+        padding: 12px;
+        border-radius: 8px;
+        background: #374151;
+    }
+
+    .admin-navbar .nav-links .logout {
+        background: #ef4444;
+    }
+
+    /* ================= OTHER MOBILE FIXES ================= */
 
     .admin-actions {
         flex-direction: column;
@@ -273,7 +316,7 @@ td button:last-child {
         grid-column: span 1;
     }
 
-    /* ✅ FIXED TABLE (SCROLL INSTEAD OF BREAK) */
+    /* TABLE SCROLL */
     table {
         display: block;
         overflow-x: auto;

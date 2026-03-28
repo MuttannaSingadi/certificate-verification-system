@@ -80,43 +80,41 @@
   font-size: 28px;
   cursor: pointer;
 }
-
-/* ========================= */
-/* 📱 MOBILE */
-/* ========================= */
-
 @media (max-width: 768px) {
 
   .navbar {
-    padding: 12px 20px;
+    position: relative;
   }
 
   .menu-icon {
     display: block;
+    font-size: 26px;
+    cursor: pointer;
   }
 
   .nav-links {
     position: absolute;
-    top: 65px;
-    right: 0;
-    width: 220px;
+    top: 60px;
+    right: 10px;
+    width: 200px;
 
-    background: linear-gradient(135deg, #e3e5eb, #576586);
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
 
+    display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    align-items: stretch; /* ✅ FIX */
+    gap: 10px;
 
-    padding: 20px 0;
-
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 
     opacity: 0;
     transform: translateY(-10px);
     pointer-events: none;
 
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
+    z-index: 1000;
   }
 
   .nav-links.active {
@@ -127,10 +125,25 @@
 
   .nav-links a,
   .nav-btn {
-    color: #1e293b;
+    display: block; /* ✅ FIX */
+    width: 100%;    /* ✅ FIX */
+    padding: 12px;
+    border-radius: 8px;
+
+    text-align: left;
+    font-size: 15px;
+
+    background: #f3f4f6;
+    color: #111827;
+  }
+
+  .nav-links a:hover,
+  .nav-btn:hover {
+    background: #e5e7eb;
   }
 
   .logout {
     color: #ef4444;
+    font-weight: 600;
   }
 }

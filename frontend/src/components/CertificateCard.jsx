@@ -28,19 +28,41 @@ export default function CertificateCard({ data }) {
     const handleDownload = async () => {
         const element = certRef.current;
 
+        const originalWidth = element.style.width;
+        element.style.width = "950px";
+
         const canvas = await html2canvas(element, {
             scale: 2,
-            useCORS: true
+            useCORS: true,
+            scrollY: -window.scrollY
         });
+
+        element.style.width = originalWidth;
 
         const imgData = canvas.toDataURL("image/png");
 
-        const pdf = new jsPDF("landscape", "px", [
-            canvas.width,
-            canvas.height
-        ]);
+        const pdf = new jsPDF("landscape", "mm", "a4");
 
-        pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+        const imgRatio = canvas.width / canvas.height;
+        const pageRatio = pdfWidth / pdfHeight;
+
+        let imgWidth, imgHeight;
+
+        if (imgRatio > pageRatio) {
+            imgWidth = pdfWidth;
+            imgHeight = pdfWidth / imgRatio;
+        } else {
+            imgHeight = pdfHeight;
+            imgWidth = pdfHeight * imgRatio;
+        }
+
+        const x = (pdfWidth - imgWidth) / 2;
+        const y = (pdfHeight - imgHeight) / 2;
+
+        pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
         pdf.save(`${data.name}_certificate.pdf`);
     };
 
@@ -49,14 +71,16 @@ export default function CertificateCard({ data }) {
 
             <div className="certificate-card" ref={certRef}>
 
-                {/* HEADER */}
+                {/* ✅ HEADER FIXED */}
                 <div className="cert-header">
                     <img src="/logo_1.png" className="cert-logo" />
-                    <h1>Certificate of Completion</h1>
-                    <p>This is to certify that</p>
+
+                    <div className="cert-title">
+                        <h1>Certificate of Completion</h1>
+                        <p>This is to certify that</p>
+                    </div>
                 </div>
 
-                {/* NAME */}
                 <h2 className="cert-name">{data.name}</h2>
 
                 <p className="cert-text">has successfully completed</p>
@@ -67,10 +91,8 @@ export default function CertificateCard({ data }) {
                     Completion Date: <b>{formattedDate}</b>
                 </p>
 
-                {/* WATERMARK */}
                 <div className="watermark">SECURECERT</div>
 
-                {/* FOOTER */}
                 <div className="cert-footer">
 
                     <div className="left">
@@ -93,12 +115,10 @@ export default function CertificateCard({ data }) {
 
                 </div>
 
-                {/* VERIFIED */}
                 <div className="verified">✔ Verified Certificate</div>
 
             </div>
 
-            {/* BUTTONS */}
             <div className="actions">
                 <button onClick={handleDownload}>Download PDF</button>
                 <button onClick={() => window.print()}>Print</button>

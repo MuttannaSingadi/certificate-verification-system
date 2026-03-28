@@ -1,4 +1,3 @@
-/* BACKGROUND */
 .certificate-container {
   min-height: 100vh;
   display: flex;
@@ -9,7 +8,6 @@
   padding: 20px;
 }
 
-/* CARD */
 .certificate-card {
   width: 100%;
   max-width: 950px;
@@ -18,43 +16,39 @@
   border-radius: 10px;
   text-align: center;
   position: relative;
-
   border: 10px solid;
   border-image: linear-gradient(135deg, #d4af37, #facc15) 1;
-
   box-shadow: 0 25px 70px rgba(0,0,0,0.2);
   overflow: hidden;
 }
 
-/* HEADER */
 .cert-header {
   position: relative;
   text-align: center;
-  padding-top: 20px;
+  padding-top: 40px; 
 }
 
-/* LOGO LEFT TOP */
 .cert-logo {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 90px;
+  top: 5px;
+  left: 20px;
+  width: 150px;
+  z-index: 2; 
 }
 
-/* TITLE */
+
 .cert-header h1 {
   font-size: 36px;
   font-weight: 700;
   color: #1e3a8a;
 }
 
-/* SUBTEXT */
+
 .cert-header p {
   font-size: 15px;
   color: #6b7280;
 }
 
-/* NAME */
 .cert-name {
   font-size: 42px;
   font-weight: 700;
@@ -64,13 +58,11 @@
   text-transform: uppercase;
 }
 
-/* TEXT */
 .cert-text {
   font-size: 16px;
   color: #374151;
 }
 
-/* COURSE */
 .cert-course {
   font-size: 26px;
   color: #b45309;
@@ -78,14 +70,13 @@
   font-weight: 600;
 }
 
-/* DATE */
 .cert-date {
   margin-top: 10px;
   font-size: 16px;
   color: #374151;
 }
 
-/* WATERMARK */
+
 .watermark {
   position: absolute;
   top: 50%;
@@ -99,7 +90,7 @@
 }
 
 /* CONTENT ABOVE WATERMARK */
-.certificate-card * {
+.certificate-card > *:not(.watermark) {
   position: relative;
   z-index: 1;
 }
@@ -113,7 +104,6 @@
   gap: 20px;
 }
 
-/* FOOTER SECTIONS */
 .cert-footer .left,
 .cert-footer .center,
 .cert-footer .right {
@@ -121,35 +111,22 @@
   text-align: center;
 }
 
-/* CENTER TEXT */
 .cert-footer .center p {
   font-size: 15px;
   color: #111827;
   font-weight: 600;
 }
 
-/* QR */
-.cert-footer .left canvas {
-  margin-bottom: 8px;
-}
-
-.cert-footer .left p {
+.cert-footer .left p,
+.cert-footer .right p {
   font-size: 13px;
   color: #6b7280;
-}
-
-/* SIGNATURE */
-.cert-footer .right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .cert-footer .right img {
   width: 130px;
 }
 
-/* SIGNATURE LINE */
 .cert-footer .right::after {
   content: "";
   width: 120px;
@@ -158,21 +135,13 @@
   margin-top: 5px;
 }
 
-.cert-footer .right p {
-  font-size: 13px;
-  margin-top: 5px;
-  color: #374151;
-}
-
-/* VERIFIED BADGE */
+/* VERIFIED */
 .verified {
   margin-top: 35px;
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   padding: 10px 28px;
   border-radius: 30px;
-  display: inline-block;
-  font-weight: 500;
 }
 
 /* BUTTONS */
@@ -194,10 +163,7 @@
   background: #1d4ed8;
 }
 
-/* ======================= */
 /* 📱 MOBILE */
-/* ======================= */
-
 @media (max-width: 768px) {
 
   .certificate-card {
@@ -216,13 +182,15 @@
     font-size: 24px;
   }
 
-  .cert-footer {
-    flex-direction: column;
-    gap: 30px;
+  /* FIX LOGO ON MOBILE */
+  .cert-logo {
+    position: static;
+    display: block;
+    margin: 0 auto 10px;
   }
 
-  .cert-footer .right img {
-    width: 100px;
+  .cert-footer {
+    flex-direction: column;
   }
 
   .actions button {
@@ -230,10 +198,7 @@
   }
 }
 
-/* ======================= */
 /* 🖨️ PRINT */
-/* ======================= */
-
 @media print {
 
   body * {
@@ -256,9 +221,5 @@
 
   .actions {
     display: none;
-  }
-
-  .certificate-container {
-    background: white;
   }
 }

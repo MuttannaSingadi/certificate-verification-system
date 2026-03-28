@@ -229,21 +229,44 @@ export default function AdminDashboard() {
         navigate("/", { replace: true });
     };
 
-    // ✅ NAVBAR
-    const AdminNavbar = () => (
-        <div className="admin-navbar">
-            <div className="logo">🎓 Admin Panel</div>
+   const [menuOpen, setMenuOpen] = useState(false);
 
-            <div className="nav-links">
-                <button onClick={fetchCertificates}>Dashboard</button>
-                <button onClick={exportExcel}>Export</button>
-                <button onClick={resetForm}>Clear</button>
-                <button className="logout" onClick={handleLogout}>
-                    Logout
-                </button>
-            </div>
+const AdminNavbar = () => (
+    <div className="admin-navbar">
+
+        <div className="logo">🎓 Admin Panel</div>
+
+        {/* MOBILE MENU ICON */}
+        <div className="admin-menu-icon" onClick={() => setMenuOpen(prev => !prev)}>
+            ☰
         </div>
-    );
+
+        <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+            <button onClick={() => {
+                fetchCertificates();
+                setMenuOpen(false);
+            }}>Dashboard</button>
+
+            <button onClick={() => {
+                exportExcel();
+                setMenuOpen(false);
+            }}>Export</button>
+
+            <button onClick={() => {
+                resetForm();
+                setMenuOpen(false);
+            }}>Clear</button>
+
+            <button className="logout" onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+            }}>
+                Logout
+            </button>
+        </div>
+
+    </div>
+);
 
     return (
         <>
