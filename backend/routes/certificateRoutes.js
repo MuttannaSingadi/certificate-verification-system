@@ -4,7 +4,7 @@ const Certificate = require("../models/Certificate");
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-/* GET ALL */
+/* GET ALL (ADMIN) */
 router.get("/", protect, adminOnly, async (req, res) => {
   const data = await Certificate.find();
   res.json(data);
@@ -35,11 +35,13 @@ router.delete("/:id", protect, adminOnly, async (req, res) => {
   res.json({ message: "Deleted" });
 });
 
-/* GET BY CERTIFICATE ID (PUBLIC) */
+/* ✅ FINAL FIX: PUBLIC SEARCH */
 router.get("/:id", async (req, res) => {
   try {
+    const searchId = req.params.id.trim().toUpperCase();
+
     const cert = await Certificate.findOne({
-      certificateId: req.params.id
+      certificateId: searchId
     });
 
     if (!cert) {

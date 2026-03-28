@@ -52,7 +52,7 @@ export default function Dashboard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ FIXED FUNCTION
+  // ✅ FINAL FIXED SEARCH (NO TOKEN REQUIRED)
   const handleSearch = async () => {
     try {
       setError("");
@@ -63,29 +63,12 @@ export default function Dashboard() {
         return;
       }
 
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setError("⚠️ Please login first");
-        return;
-      }
-
-      const res = await fetch(`${API}/${certificateId}`, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
+      const res = await fetch(`${API}/${certificateId}`);
       const data = await res.json();
 
       console.log("API DATA:", data);
 
-      if (data?.message === "No token") {
-        setError("⚠️ Unauthorized. Please login again");
-        return;
-      }
-
-      if (!res.ok || !data) {
+      if (!res.ok) {
         setError("❌ Certificate not found");
         return;
       }

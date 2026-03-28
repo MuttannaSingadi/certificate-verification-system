@@ -22,6 +22,11 @@ const certificateSchema = new mongoose.Schema({
     unique: true
   },
 
+  // ✅ FIX: make optional
+  completionDate: {
+    type: Date
+  },
+
   issueDate: {
     type: Date,
     default: Date.now
