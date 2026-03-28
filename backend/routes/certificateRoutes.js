@@ -35,4 +35,22 @@ router.delete("/:id", protect, adminOnly, async (req, res) => {
   res.json({ message: "Deleted" });
 });
 
+/* GET BY CERTIFICATE ID (PUBLIC) */
+router.get("/:id", async (req, res) => {
+  try {
+    const cert = await Certificate.findOne({
+      certificateId: req.params.id
+    });
+
+    if (!cert) {
+      return res.status(404).json({ message: "Certificate not found" });
+    }
+
+    res.json(cert);
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;

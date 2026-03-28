@@ -30,29 +30,37 @@ export default function Login() {
 
       const data = await res.json();
 
-      if (res.ok) {
+      console.log("LOGIN RESPONSE:", data); // ✅ DEBUG
+
+      if (res.ok && data.token) {
+
+        // ✅ STORE TOKEN SAFELY
         localStorage.setItem("token", data.token);
+
+        // ✅ STORE USER
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        if (data.user.role === "admin") {
+        console.log("TOKEN SAVED:", localStorage.getItem("token")); // ✅ CHECK
+
+        // ✅ NAVIGATION
+        if (data.user?.role === "admin") {
           navigate("/admindashboard");
         } else {
           navigate("/dashboard");
         }
 
       } else {
-        alert(data.message);
+        alert(data.message || "Login failed");
       }
 
     } catch (error) {
+      console.error("LOGIN ERROR:", error);
       alert("Server error");
     }
   };
 
   return (
     <>
-     
-
       <div className="login-container">
 
         <div className="login-card">
@@ -86,7 +94,7 @@ export default function Login() {
           <p className="register-link">
             Don't have an account? <Link to="/register">Register</Link>
           </p>
-          
+
         </div>
 
       </div>

@@ -20,7 +20,6 @@ export default function Dashboard() {
 
   const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
 
-  // Load user data
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -31,7 +30,6 @@ export default function Dashboard() {
     }
   }, []);
 
-  // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest(".dashboard-navbar")) {
@@ -43,7 +41,6 @@ export default function Dashboard() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Close menu on resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768) {
@@ -55,6 +52,7 @@ export default function Dashboard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // ✅ FIXED FUNCTION
   const handleSearch = async () => {
     try {
       setError("");
@@ -65,17 +63,38 @@ export default function Dashboard() {
         return;
       }
 
-      const res = await fetch(`${API}/${certificateId}`);
-      const data = await res.json();
+      const token = localStorage.getItem("token");
 
-      if (!data || data.message) {
-        setError("❌ Certificate not found");
-      } else {
-        setResult(data);
-        setHistory((prev) => [data, ...prev]);
+      if (!token) {
+        setError("⚠️ Please login first");
+        return;
       }
 
-    } catch {
+      const res = await fetch(`${API}/${certificateId}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+
+      console.log("API DATA:", data);
+
+      if (data?.message === "No token") {
+        setError("⚠️ Unauthorized. Please login again");
+        return;
+      }
+
+      if (!res.ok || !data) {
+        setError("❌ Certificate not found");
+        return;
+      }
+
+      setResult(data);
+      setHistory((prev) => [data, ...prev]);
+
+    } catch (err) {
+      console.error(err);
       setError("⚠️ Server error");
     }
   };
@@ -114,40 +133,39 @@ export default function Dashboard() {
 
   const Navbar = () => (
     <div className="dashboard-navbar-wrapper">
-  <div className="dashboard-navbar">
+      <div className="dashboard-navbar">
 
-    <div className="logo">🎓 User Dashboard</div>
+        <div className="logo">🎓 User Dashboard</div>
 
-    <div className="menu-icon" onClick={() => setMenuOpen(prev => !prev)}>
-      ☰
-    </div>
+        <div className="menu-icon" onClick={() => setMenuOpen(prev => !prev)}>
+          ☰
+        </div>
 
-      <div className={`nav-links ${menuOpen ? "active" : ""}`}>
-        <button onClick={() => {
-          navigate("/");
-          setMenuOpen(false);
-        }}>
-          Home
-        </button>
+        <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+          <button onClick={() => {
+            navigate("/");
+            setMenuOpen(false);
+          }}>
+            Home
+          </button>
 
-        <button onClick={() => {
-          setResult(null);
-          setCertificateId("");
-          setError("");
-          setMenuOpen(false);
-        }}>
-          Clear
-        </button>
+          <button onClick={() => {
+            setResult(null);
+            setCertificateId("");
+            setError("");
+            setMenuOpen(false);
+          }}>
+            Clear
+          </button>
 
-        <button className="logout" onClick={() => {
-          handleLogout();
-          setMenuOpen(false);
-        }}>
-          Logout
-        </button>
+          <button className="logout" onClick={() => {
+            handleLogout();
+            setMenuOpen(false);
+          }}>
+            Logout
+          </button>
+        </div>
       </div>
-      </div>
-
     </div>
   );
 
@@ -169,7 +187,6 @@ export default function Dashboard() {
             <input
               type="text"
               name="name"
-              placeholder="Enter Name"
               value={profile.name}
               onChange={handleProfileChange}
             />
@@ -177,7 +194,6 @@ export default function Dashboard() {
             <input
               type="email"
               name="email"
-              placeholder="Enter Email"
               value={profile.email}
               onChange={handleProfileChange}
             />

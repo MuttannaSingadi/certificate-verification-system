@@ -24,7 +24,6 @@ export default function AdminDashboard() {
     const [deleteId, setDeleteId] = useState(null);
     const [message, setMessage] = useState("");
 
-    // ✅ FILE STATE (NEW)
     const [selectedFile, setSelectedFile] = useState(null);
 
     const API = "https://certificate-verification-system-tpcf.onrender.com/api/certificates";
@@ -33,30 +32,46 @@ export default function AdminDashboard() {
         fetchCertificates();
     }, []);
 
-    // ✅ FETCH
+    // ✅ FIXED: Added token
     const fetchCertificates = async () => {
         try {
-            const res = await fetch(API);
+            const token = localStorage.getItem("token");
+
+            const res = await fetch(API, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
             const data = await res.json();
-            setCertificates(data);
+
+            console.log("API DATA:", data);
+
+            setCertificates(Array.isArray(data) ? data : []);
+
         } catch (err) {
             console.error("Error fetching data:", err);
+            setCertificates([]);
         }
     };
 
-    // ✅ INPUT CHANGE
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // ✅ ADD
+    // ✅ FIXED: Added token
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            const token = localStorage.getItem("token");
+
             await fetch(API, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify(form)
             });
 
@@ -70,15 +85,23 @@ export default function AdminDashboard() {
         setTimeout(() => setMessage(""), 2000);
     };
 
-    // ✅ DELETE
     const handleDeleteClick = (id) => {
         setDeleteId(id);
         setShowConfirm(true);
     };
 
+    // ✅ FIXED: Added token
     const confirmDelete = async () => {
         try {
-            await fetch(`${API}/${deleteId}`, { method: "DELETE" });
+            const token = localStorage.getItem("token");
+
+            await fetch(`${API}/${deleteId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
             setMessage("❌ Certificate deleted successfully");
             fetchCertificates();
         } catch {
@@ -95,7 +118,6 @@ export default function AdminDashboard() {
         setDeleteId(null);
     };
 
-    // ✅ EDIT
     const handleEdit = (cert) => {
         setForm({
             ...cert,
@@ -107,12 +129,17 @@ export default function AdminDashboard() {
         setIsEditing(true);
     };
 
-    // ✅ UPDATE
+    // ✅ FIXED: Added token
     const handleUpdate = async () => {
         try {
+            const token = localStorage.getItem("token");
+
             await fetch(`${API}/${originalId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify(form)
             });
 
@@ -126,7 +153,6 @@ export default function AdminDashboard() {
         setTimeout(() => setMessage(""), 2000);
     };
 
-    // ✅ RESET
     const resetForm = () => {
         setForm({
             name: "",
@@ -139,7 +165,6 @@ export default function AdminDashboard() {
         setIsEditing(false);
     };
 
-    // ✅ EXPORT EXCEL
     const exportExcel = () => {
         const formattedData = certificates.map(cert => ({
             Name: cert.name,
@@ -167,7 +192,6 @@ export default function AdminDashboard() {
         XLSX.writeFile(wb, `Certificates_${new Date().toISOString().slice(0, 10)}.xlsx`);
     };
 
-    // ✅ IMPORT EXCEL (WITH BUTTON 🔥)
     const handleFileUpload = async () => {
 
         if (!selectedFile) {
@@ -187,6 +211,8 @@ export default function AdminDashboard() {
             const jsonData = XLSX.utils.sheet_to_json(sheet);
 
             try {
+                const token = localStorage.getItem("token");
+
                 for (let row of jsonData) {
                     const formatted = {
                         name: row.Name || "",
@@ -198,7 +224,10 @@ export default function AdminDashboard() {
 
                     await fetch(API, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json" },
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
                         body: JSON.stringify(formatted)
                     });
                 }
@@ -217,13 +246,13 @@ export default function AdminDashboard() {
         reader.readAsArrayBuffer(selectedFile);
     };
 
-    // ✅ SEARCH
-    const filtered = certificates.filter(cert =>
-        cert.name.toLowerCase().includes(search.toLowerCase()) ||
-        cert.certificateId.toLowerCase().includes(search.toLowerCase())
-    );
+    const filtered = Array.isArray(certificates)
+        ? certificates.filter(cert =>
+            (cert.name || "").toLowerCase().includes(search.toLowerCase()) ||
+            (cert.certificateId || "").toLowerCase().includes(search.toLowerCase())
+        )
+        : [];
 
-    // ✅ LOGOUT
     const handleLogout = () => {
         localStorage.clear();
         navigate("/", { replace: true });
@@ -236,14 +265,13 @@ export default function AdminDashboard() {
 
             <div className="logo">🎓 Admin Panel</div>
 
-            {/* MOBILE MENU ICON */}
             <div className="admin-menu-icon" onClick={() => setMenuOpen(prev => !prev)}>
                 ☰
             </div>
 
             <div className={`nav-links ${menuOpen ? "active" : ""}`}>
                 <button onClick={() => {
-                    navigate("/");   // ✅ go to home
+                    navigate("/");
                     setMenuOpen(false);
                 }}>
                     Home
@@ -283,8 +311,6 @@ export default function AdminDashboard() {
                 {message && <div className="success-msg">{message}</div>}
 
                 <h2>🛠 Admin Dashboard</h2>
-
-
 
                 <div className="admin-actions">
                     <div className="upload-section">

@@ -17,20 +17,22 @@ export default function RegisteredUsers() {
         try {
             const res = await fetch(API);
 
-            // ❌ handle 404 or error
-            if (!res.ok) {
-                throw new Error("API not found");
+            let data = [];
+
+            if (res.ok) {
+                const result = await res.json();
+
+                console.log("API DATA:", result);
+
+                // ✅ Ensure always array
+                if (Array.isArray(result)) {
+                    data = result;
+                } else if (result.users && Array.isArray(result.users)) {
+                    data = result.users; // fallback if wrapped
+                }
             }
 
-            const data = await res.json();
-            console.log("API DATA:", data);
-
-            // ✅ FIX: ensure array
-            if (Array.isArray(data)) {
-                setUsers(data);
-            } else {
-                setUsers([]);
-            }
+            setUsers(data);
 
         } catch (err) {
             console.error("Fetch Error:", err);
@@ -40,13 +42,16 @@ export default function RegisteredUsers() {
         }
     };
 
-    // ✅ SAFE FILTER
-    const filtered = Array.isArray(users)
-        ? users.filter(user =>
-            user.name?.toLowerCase().includes(search.toLowerCase()) ||
-            user.email?.toLowerCase().includes(search.toLowerCase())
-        )
-        : [];
+    // ✅ Safe filter (no crash)
+    const filtered = users.filter(user => {
+        const name = user?.name || "";
+        const email = user?.email || "";
+
+        return (
+            name.toLowerCase().includes(search.toLowerCase()) ||
+            email.toLowerCase().includes(search.toLowerCase())
+        );
+    });
 
     return (
         <div className="admin-container">
@@ -56,6 +61,7 @@ export default function RegisteredUsers() {
             <input
                 className="search-input"
                 placeholder="Search by name or email"
+                value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
 
@@ -75,11 +81,11 @@ export default function RegisteredUsers() {
                     <tbody>
                         {filtered.length > 0 ? (
                             filtered.map((user, index) => (
-                                <tr key={user._id}>
+                                <tr key={user._id || index}>
                                     <td>{index + 1}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.role}</td>
+                                    <td>{user.name || "N/A"}</td>
+                                    <td>{user.email || "N/A"}</td>
+                                    <td>{user.role || "N/A"}</td>
                                 </tr>
                             ))
                         ) : (
