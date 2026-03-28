@@ -41,7 +41,7 @@ export default function Navbar() {
         className="menu-icon"
         onClick={() => setMenuOpen(prev => !prev)}
       >
-        {menuOpen ? "✖" : "☰"}
+        {menuOpen ? "☰" : "☰"}
       </div>
 
       <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
