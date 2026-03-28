@@ -333,23 +333,24 @@ body {
     color: white;
 }
 
-/* ================= MOBILE ================= */
 @media (max-width: 768px) {
 
-    .menu-icon {
+    .dashboard-navbar-wrapper .menu-icon {
         display: block;
+        font-size: 26px;
+        cursor: pointer;
     }
 
-    .nav-links {
+    .dashboard-navbar-wrapper .nav-links {
         position: absolute;
-        top: 70px; /* push below navbar */
-        right: 15px;
+        top: 60px;
+        right: 10px;
 
-        width: 220px;
+        width: 200px;
         background: #1f2937;
 
-        border-radius: 12px;
-        padding: 12px;
+        border-radius: 10px;
+        padding: 10px;
 
         display: none;
         flex-direction: column;
@@ -359,20 +360,20 @@ body {
         box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
 
-    .nav-links.active {
+    .dashboard-navbar-wrapper .nav-links.active {
         display: flex;
     }
 
-    .nav-links button {
+    .dashboard-navbar-wrapper .nav-links button {
         width: 100%;
         text-align: left;
-        padding: 12px;
-        border-radius: 8px;
+        padding: 10px;
+        border-radius: 6px;
         background: #374151;
         font-size: 14px;
     }
 
-    .nav-links .logout {
+    .dashboard-navbar-wrapper .nav-links .logout {
         background: #dc2626;
     }
 }

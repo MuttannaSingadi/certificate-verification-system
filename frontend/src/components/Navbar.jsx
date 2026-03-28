@@ -26,7 +26,7 @@ export default function Navbar() {
       return;
     }
 
-    navigate("/SearchCCertificate");
+    navigate("/SearchCertificate");
     setMenuOpen(false);
   };
 
@@ -51,9 +51,9 @@ export default function Navbar() {
         </li>
 
         <li>
-          <Link onClick={handleVerifyClick}>
+          <button onClick={handleVerifyClick} className="nav-btn">
             Verify
-          </Link>
+          </button>
         </li>
 
         {user?.role === "admin" && (
@@ -64,19 +64,20 @@ export default function Navbar() {
           </li>
         )}
 
+        {user && user.role !== "admin" && (
+          <li>
+            <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
+              User
+            </Link>
+          </li>
+        )}
+
         {user ? (
-          <>
-            <li>
-              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link onClick={handleLogout}>
-                Logout
-              </Link>
-            </li>
-          </>
+          <li>
+            <button onClick={handleLogout} className="nav-btn logout">
+              Logout
+            </button>
+          </li>
         ) : (
           <>
             <li>

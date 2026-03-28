@@ -29,11 +29,16 @@
   cursor: pointer;
 }
 
-/* NAV LINKS */
+/* NAV LINKS (DESKTOP) */
 .nav-links {
   display: flex;
   gap: 30px;
   list-style: none;
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
 }
 
 .nav-links a,
@@ -42,26 +47,9 @@
   color: white;
   font-size: 15px;
   font-weight: 500;
-  position: relative;
   cursor: pointer;
   background: none;
   border: none;
-}
-
-/* HOVER EFFECT */
-.nav-links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -5px;
-  width: 0%;
-  height: 2px;
-  background: #facc15;
-  transition: 0.3s;
-}
-
-.nav-links a:hover::after {
-  width: 100%;
 }
 
 .nav-links a:hover,
@@ -69,27 +57,29 @@
   color: #facc15;
 }
 
-/* LOGOUT COLOR */
 .logout {
-  color: #f87171;
+  color: white;
 }
 
-/* HAMBURGER */
+/* MENU ICON */
 .menu-icon {
   display: none;
-  font-size: 28px;
-  cursor: pointer;
 }
+
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
 
   .navbar {
+    padding: 12px 20px;
     position: relative;
   }
 
   .menu-icon {
-    display: block;
-    font-size: 26px;
+    display: block !important;
+    font-size: 28px;
     cursor: pointer;
+    color: #ffffff; /* ✅ FIX (visible color) */
+    z-index: 1100;  /* ✅ ensure above */
   }
 
   .nav-links {
@@ -98,35 +88,30 @@
     right: 10px;
     width: 200px;
 
-    background: white;
+    background: #ffffff;
     border-radius: 12px;
     padding: 12px;
 
-    display: flex;
+    display: none;
     flex-direction: column;
-    align-items: stretch; /* ✅ FIX */
     gap: 10px;
 
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-
-    opacity: 0;
-    transform: translateY(-10px);
-    pointer-events: none;
-
-    transition: 0.3s ease;
     z-index: 1000;
   }
 
   .nav-links.active {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+    display: flex;
+  }
+
+  .nav-links li {
+    width: 100%;
   }
 
   .nav-links a,
   .nav-btn {
-    display: block; /* ✅ FIX */
-    width: 100%;    /* ✅ FIX */
+    display: block;
+    width: 100%;
     padding: 12px;
     border-radius: 8px;
 
@@ -143,7 +128,7 @@
   }
 
   .logout {
-    color: #ef4444;
+     color: rgb(35, 33, 33);
     font-weight: 600;
   }
 }

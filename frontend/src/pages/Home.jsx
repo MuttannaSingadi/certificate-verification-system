@@ -110,7 +110,7 @@ export default function Home() {
 
         <div className="container">
 
-          <h2>About Our System</h2>
+          <h3>About Our System</h3>
 
           <p>
             The Certificate Verification System helps institutions issue

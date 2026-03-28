@@ -23,7 +23,7 @@ export default function CertificateDetails() {
 
     return (
         <>
-            <Navbar />
+            
             <CertificateCard data={state} />
         </>
     );

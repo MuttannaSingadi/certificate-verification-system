@@ -164,7 +164,7 @@ export default function AdminDashboard() {
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Certificates");
 
-        XLSX.writeFile(wb, `Certificates_${new Date().toISOString().slice(0,10)}.xlsx`);
+        XLSX.writeFile(wb, `Certificates_${new Date().toISOString().slice(0, 10)}.xlsx`);
     };
 
     // ✅ IMPORT EXCEL (WITH BUTTON 🔥)
@@ -229,44 +229,46 @@ export default function AdminDashboard() {
         navigate("/", { replace: true });
     };
 
-   const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
-const AdminNavbar = () => (
-    <div className="admin-navbar">
+    const AdminNavbar = () => (
+        <div className="admin-navbar">
 
-        <div className="logo">🎓 Admin Panel</div>
+            <div className="logo">🎓 Admin Panel</div>
 
-        {/* MOBILE MENU ICON */}
-        <div className="admin-menu-icon" onClick={() => setMenuOpen(prev => !prev)}>
-            ☰
+            {/* MOBILE MENU ICON */}
+            <div className="admin-menu-icon" onClick={() => setMenuOpen(prev => !prev)}>
+                ☰
+            </div>
+
+            <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+                <button onClick={() => {
+                    navigate("/");   // ✅ go to home
+                    setMenuOpen(false);
+                }}>
+                    Home
+                </button>
+
+                <button onClick={() => {
+                    exportExcel();
+                    setMenuOpen(false);
+                }}>Export</button>
+
+                <button onClick={() => {
+                    resetForm();
+                    setMenuOpen(false);
+                }}>Clear</button>
+
+                <button className="logout" onClick={() => {
+                    handleLogout();
+                    setMenuOpen(false);
+                }}>
+                    Logout
+                </button>
+            </div>
+
         </div>
-
-        <div className={`nav-links ${menuOpen ? "active" : ""}`}>
-            <button onClick={() => {
-                fetchCertificates();
-                setMenuOpen(false);
-            }}>Dashboard</button>
-
-            <button onClick={() => {
-                exportExcel();
-                setMenuOpen(false);
-            }}>Export</button>
-
-            <button onClick={() => {
-                resetForm();
-                setMenuOpen(false);
-            }}>Clear</button>
-
-            <button className="logout" onClick={() => {
-                handleLogout();
-                setMenuOpen(false);
-            }}>
-                Logout
-            </button>
-        </div>
-
-    </div>
-);
+    );
 
     return (
         <>
@@ -278,19 +280,19 @@ const AdminNavbar = () => (
 
                 <h2>🛠 Admin Dashboard</h2>
 
-                              
+
 
                 <div className="admin-actions">
                     <div className="upload-section">
-                    <input
-                        type="file"
-                        accept=".xlsx, .xls"
-                        onChange={(e) => setSelectedFile(e.target.files[0])}
-                    />
-                    <button onClick={handleFileUpload}>
-                        📤 Upload Excel
-                    </button>
-                </div>
+                        <input
+                            type="file"
+                            accept=".xlsx, .xls"
+                            onChange={(e) => setSelectedFile(e.target.files[0])}
+                        />
+                        <button onClick={handleFileUpload}>
+                            📤 Upload Excel
+                        </button>
+                    </div>
                     <button onClick={exportExcel}>📥 Export</button>
                     <button onClick={fetchCertificates}>🔄 Refresh</button>
                     <button onClick={resetForm}>🧹 Clear</button>
@@ -353,7 +355,7 @@ const AdminNavbar = () => (
                                 <td>{cert.email}</td>
                                 <td>{cert.course}</td>
                                 <td>{cert.certificateId}</td>
-                                 <td>
+                                <td>
                                     {cert.completionDate
                                         ? new Date(cert.completionDate).toLocaleDateString()
                                         : cert.issueDate
