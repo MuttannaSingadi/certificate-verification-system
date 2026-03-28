@@ -7,7 +7,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const certificateRoutes = require("./routes/certificateRoutes");
-
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
@@ -33,7 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/certificates", certificateRoutes);
 app.use("/uploads", express.static("uploads"));
-
+app.use("/api", userRoutes);
 /* Handle Unknown Routes */
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });

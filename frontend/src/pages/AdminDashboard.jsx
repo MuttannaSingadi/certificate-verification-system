@@ -249,6 +249,10 @@ export default function AdminDashboard() {
                     Home
                 </button>
 
+                <button onClick={() => navigate("/users")}>
+                    👥 Users
+                </button>
+
                 <button onClick={() => {
                     exportExcel();
                     setMenuOpen(false);

@@ -11,6 +11,7 @@ import CertificateDetails from "./pages/CertificateDetails";
 import GenerateCertificate from "./pages/GenerateCertificate";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RegisteredUsers from "./pages/RegisteredUsers";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/searchcertificate" element={<SearchCertificate />} />
         <Route path="/certificate" element={<CertificateDetails />} />
-
+        <Route path="/users" element={<RegisteredUsers />} />
         {/* 🔒 PROTECTED ROUTES */}
         <Route
           path="/dashboard"
