@@ -35,13 +35,13 @@ router.delete("/:id", protect, adminOnly, async (req, res) => {
   res.json({ message: "Deleted" });
 });
 
-/* ✅ FINAL FIX: PUBLIC SEARCH */
 router.get("/:id", async (req, res) => {
   try {
-    const searchId = req.params.id.trim().toUpperCase();
+    const searchId = req.params.id.trim();
 
+    
     const cert = await Certificate.findOne({
-      certificateId: searchId
+      certificateId: { $regex: `^${searchId}$`, $options: "i" }
     });
 
     if (!cert) {
@@ -51,6 +51,7 @@ router.get("/:id", async (req, res) => {
     res.json(cert);
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
