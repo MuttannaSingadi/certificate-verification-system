@@ -153,7 +153,7 @@ th {
 /* BODY */
 td {
     padding: 12px;
-    color: #111827; /* ✅ FIXED TEXT */
+    color: #111827; 
     font-weight: 500;
 }
 
@@ -247,22 +247,19 @@ td button:last-child {
     background: #e5e7eb;
     color: #111827;
 }
-/* ======================= */
+
 /* 📱 MOBILE FIX (FINAL) */
-/* ======================= */
 
 @media (max-width: 768px) {
 
-    /* ✅ FIX NAVBAR (IMPORTANT) */
     .admin-navbar {
         position: relative;
         display: flex;
-        flex-direction: row; /* ✅ keep row */
+        flex-direction: row;
         justify-content: space-between;
         align-items: center;
     }
 
-    /* ✅ MENU ICON */
     .admin-menu-icon {
         display: block;
         color: white;
@@ -270,7 +267,6 @@ td button:last-child {
         cursor: pointer;
     }
 
-    /* ✅ DROPDOWN MENU */
     .admin-navbar .nav-links {
         position: absolute;
         top: 65px;
@@ -293,7 +289,6 @@ td button:last-child {
         display: flex;
     }
 
-    /* ✅ BUTTON STYLE */
     .admin-navbar .nav-links button {
         width: 100%;
         text-align: left;

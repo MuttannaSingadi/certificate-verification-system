@@ -11,7 +11,6 @@ exports.uploadStudents = async (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rawData = xlsx.utils.sheet_to_json(sheet);
 
-    // 🔥 Map Excel → DB schema
     const data = rawData.map((item, index) => ({
       name: item.name || item.Name,
       email: item.email || item.Email,
@@ -19,21 +18,20 @@ exports.uploadStudents = async (req, res) => {
       certificateId:
         item.certificateId ||
         item["Certificate ID"] ||
-        `CERT${Date.now()}${index}` // unique fallback
+        `CERT${Date.now()}${index}` 
     }));
 
-    // 🔥 Insert with duplicate skip
     let insertedCount = 0;
 
     try {
       const result = await Certificate.insertMany(data, {
-        ordered: false // ✅ skip duplicates
+        ordered: false  
       });
 
       insertedCount = result.length;
 
     } catch (err) {
-      // ⚠️ Mongo throws error for duplicates but still inserts valid ones
+   
       if (err.writeErrors) {
         insertedCount = err.result.result.nInserted;
       } else {

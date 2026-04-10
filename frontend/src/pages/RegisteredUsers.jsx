@@ -24,11 +24,10 @@ export default function RegisteredUsers() {
 
                 console.log("API DATA:", result);
 
-                // ✅ Ensure always array
                 if (Array.isArray(result)) {
                     data = result;
                 } else if (result.users && Array.isArray(result.users)) {
-                    data = result.users; // fallback if wrapped
+                    data = result.users; 
                 }
             }
 
@@ -42,7 +41,6 @@ export default function RegisteredUsers() {
         }
     };
 
-    // ✅ Safe filter (no crash)
     const filtered = users.filter(user => {
         const name = user?.name || "";
         const email = user?.email || "";

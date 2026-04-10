@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-/* BACKGROUND (PROJECT THEME) */
+/* BACKGROUND  */
 .register-container {
     min-height: 100vh;
     display: flex;
@@ -125,9 +125,9 @@
     }
 }
 
-/* ======================= */
-/* 📱 RESPONSIVE DESIGN */
-/* ======================= */
+
+/*  RESPONSIVE DESIGN */
+
 
 @media (max-width: 480px) {
 

@@ -52,7 +52,7 @@ export default function Dashboard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ FINAL FIXED SEARCH 
+  
   const handleSearch = async () => {
     try {
       setError("");

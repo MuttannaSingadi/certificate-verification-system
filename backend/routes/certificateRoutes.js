@@ -4,13 +4,11 @@ const Certificate = require("../models/Certificate");
 
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
-/* GET ALL (ADMIN) */
 router.get("/", protect, adminOnly, async (req, res) => {
   const data = await Certificate.find();
   res.json(data);
 });
 
-/* ADD */
 router.post("/", protect, adminOnly, async (req, res) => {
   const cert = new Certificate(req.body);
   await cert.save();

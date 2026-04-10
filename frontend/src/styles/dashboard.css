@@ -24,8 +24,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* ================= NAVBAR ================= */
-/* ================= DASHBOARD NAVBAR ONLY ================= */
 .dashboard-navbar-wrapper .dashboard-navbar {
     display: flex;
     justify-content: space-between;
@@ -285,7 +283,6 @@ body {
     transform: translateY(-3px);
 }
 
-/* DELETE BUTTON */
 .delete-btn {
     background: #fee2e2;
     color: #dc2626;
@@ -322,7 +319,7 @@ body {
 }
 /* ================= DASHBOARD NAVBAR FIX ================= */
 .dashboard-navbar {
-    position: relative; /* important */
+    position: relative; 
 }
 
 /* Menu icon */

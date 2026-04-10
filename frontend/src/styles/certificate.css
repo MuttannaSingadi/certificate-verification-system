@@ -181,8 +181,7 @@
   .cert-header h1 {
     font-size: 24px;
   }
-
-  /* FIX LOGO ON MOBILE */
+  
   .cert-logo {
     position: static;
     display: block;

@@ -1,4 +1,3 @@
-/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -29,7 +28,7 @@
   cursor: pointer;
 }
 
-/* NAV LINKS (DESKTOP) */
+/* NAV LINKS */
 .nav-links {
   display: flex;
   gap: 30px;
@@ -78,8 +77,8 @@
     display: block !important;
     font-size: 28px;
     cursor: pointer;
-    color: #ffffff; /* ✅ FIX (visible color) */
-    z-index: 1100;  /* ✅ ensure above */
+    color: #ffffff; 
+    z-index: 1100;
   }
 
   .nav-links {

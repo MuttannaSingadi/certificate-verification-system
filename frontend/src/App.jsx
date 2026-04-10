@@ -20,7 +20,7 @@ function App() {
       <ToastContainer position="top-right" autoClose={500} />
       <Routes>
 
-        {/* ✅ PUBLIC ROUTES */}
+        {/* PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

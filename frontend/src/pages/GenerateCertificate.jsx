@@ -27,7 +27,6 @@ export default function GenerateCertificate() {
 
             const data = await res.json();
 
-            // 👉 Redirect to certificate page
             navigate("/certificate", { state: data });
 
         } catch (error) {
@@ -55,6 +54,11 @@ export default function GenerateCertificate() {
                         value={certificateId}
                         onChange={(e) => setCertificateId(e.target.value)}
                     />
+                    <div className="info-section">
+                        <p>🔐 Secure & Verified Certificates</p>
+                        <p>⚡ Instant Verification</p>
+                        <p>🌐 Trusted by Institutions</p>
+                    </div>
 
                     <button onClick={handleGenerate}>
                         🚀 Generate

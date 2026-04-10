@@ -32,7 +32,6 @@ export default function AdminDashboard() {
         fetchCertificates();
     }, []);
 
-    // ✅ FIXED: Added token
     const fetchCertificates = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -59,7 +58,6 @@ export default function AdminDashboard() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // ✅ FIXED: Added token
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -75,7 +73,7 @@ export default function AdminDashboard() {
                 body: JSON.stringify(form)
             });
 
-            setMessage("✅ Certificate added successfully");
+            setMessage(" Certificate added successfully");
             fetchCertificates();
             resetForm();
         } catch {
@@ -90,7 +88,6 @@ export default function AdminDashboard() {
         setShowConfirm(true);
     };
 
-    // ✅ FIXED: Added token
     const confirmDelete = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -129,7 +126,6 @@ export default function AdminDashboard() {
         setIsEditing(true);
     };
 
-    // ✅ FIXED: Added token
     const handleUpdate = async () => {
         try {
             const token = localStorage.getItem("token");

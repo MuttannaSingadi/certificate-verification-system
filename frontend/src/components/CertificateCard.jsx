@@ -71,7 +71,7 @@ export default function CertificateCard({ data }) {
 
             <div className="certificate-card" ref={certRef}>
 
-                {/* ✅ HEADER FIXED */}
+                {/* HEADER FIXED */}
                 <div className="cert-header">
                     <img src="/logo_1.png" className="cert-logo" />
 

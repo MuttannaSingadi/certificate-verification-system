@@ -30,19 +30,19 @@ export default function Login() {
 
       const data = await res.json();
 
-      console.log("LOGIN RESPONSE:", data); // ✅ DEBUG
+      console.log("LOGIN RESPONSE:", data);
 
       if (res.ok && data.token) {
 
-        // ✅ STORE TOKEN SAFELY
+        // STORE TOKEN SAFELY
         localStorage.setItem("token", data.token);
 
-        // ✅ STORE USER
+        // STORE USER
         localStorage.setItem("user", JSON.stringify(data.user));
 
-        console.log("TOKEN SAVED:", localStorage.getItem("token")); // ✅ CHECK
+        console.log("TOKEN SAVED:", localStorage.getItem("token")); 
 
-        // ✅ NAVIGATION
+        // NAVIGATION
         if (data.user?.role === "admin") {
           navigate("/admindashboard");
         } else {
